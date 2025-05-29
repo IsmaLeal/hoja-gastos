@@ -83,7 +83,7 @@ def view_entries():
     conn = psycopg2.connect(DATABASE_URL)
     c = conn.cursor()
     c.execute("SELECT name, description, amount, category, whatfor, date, image_filename FROM expenses ORDER BY date DESC")
-    entres = c.fetchall()
+    entries = c.fetchall()
     conn.close()
     return render_template("view.html", entries=entries)
 
