@@ -78,7 +78,7 @@ def init_expenses_table():
             description TEXT,
             amount REAL,
             category TEXT,
-            whatfor TEXT,\\\
+            whatfor TEXT,
             date DATE,
             image_filename TEXT
         )
