@@ -44,7 +44,7 @@
                 <th>Concepto</th>
                 <th>Imagen</th>
             </tr>
-            {% for date, amount, whatfor, image_filename in entries %}
+            {% for date, account, amount, whatfor, image_filename in entries %}
                 <tr>
                     <td>{{ date }}</td>
                     <td>{{ amount }}</td>
@@ -59,7 +59,7 @@
                 </tr>
             {% endfor %}
         </table>
-    <h3>Total: {{ total }} €</h3>
+    <h3>Total: {{ total }} € a la cuenta: {{ account }}.</h3>
     {% endif %}
 </body>
 </html>

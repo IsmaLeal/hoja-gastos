@@ -101,7 +101,7 @@ def tesoreria():
         conn = psycopg2.connect(DATABASE_URL)
         c = conn.cursor()
         c.execute("""
-            SELECT date, amount, whatfor, image_filename
+            SELECT date, account, amount, whatfor, image_filename
             FROM expenses
             WHERE LOWER(name) = LOWER(%s)
             ORDER BY date DESC
@@ -109,7 +109,7 @@ def tesoreria():
         entries = c.fetchall()
         conn.close()
 
-        total = sum(entry[1] for entry in entries if entry[1] is not None)
+        total = sum(entry[2] for entry in entries if entry[2] is not None)
 
         return render_template("tesoreria.html", people=people.keys(), entries=entries, selected_name=selected_name,
                                total=total)
