@@ -1,0 +1,92 @@
+from flask import Flask, render_template, request
+import os
+from werkzeug.utils import secure_filename
+from datetime import datetime, timedelta
+import csv
+import psycopg2
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    people = {
+        "ivan gonzalez": "ES7114650100982050375582",
+        "gonzalo pousa": "ES0921002904030262057029",
+        "ismael leal": "ES6101821294110204237477",
+        "maria bravo": "ES9630580990292762776683",
+        "nuria gomez": "ES5621003414171300376682",
+        "lola damgaard": "ES6701822566150201590657",
+        "cyntia fritz": "ES0721001176131300462209",
+        "sebastian gonzalez": "ES2721003322621300316258",
+        "sara jimenez": "",
+        "irune de miguel": "ES5221004587130200293195",
+        "pablo cabarcos": "",
+        "eva gomez": "ES4521002339310200362644",
+        "miguel ruiz": "ES9630580990292762776683",
+        "ruben garcia": "ES6700814197310001646570",
+        "ivan martin": "ES7314650170191752597751",
+        "laura diaz": "ES0514650170141761503626",
+        "alem": "",
+        "luna miralles": "ES1715632626393265677051",
+        "lucia alarcon": "ES3901824030810201646259",
+        "gonzalo lara": "ES2200730100520742787943",
+        "nora manzano": "",
+    }
+    return render_template("index.html", people=people)
+
+@app.route("/submit", methods=["POST"])
+def submit():
+    name = request.form["name"]
+    account = request.form["account"]
+    description = request.form["description"]
+    amount = float(request.form["amount"])
+    category = request.form["category"]
+    where = request.form["where"]
+    date = request.form["date"]
+
+    # Handle image
+    image = request.files.get("image")
+    image_filename = None
+    if image and image.filename:
+        image_filename = secure_filename(image.filename)
+        image.save(os.path.join("uploads", image_filename))
+
+    # Save to PostgreSQL
+    conn = psycopg2.connect(DATABASE_URL)
+    c = conn.cursor()
+    c.execute("""
+        INSERT INTO expenses (name, account, description, amount, category, where, date, image_filename)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """, (name, account, description, amount, category, where, date, image_filename))
+    conn.commit()
+    conn.close()
+
+    return "Submission saved succesfully!"
+
+@app.route("/init-expenses-table")
+def init_expenses_table():
+    import psycopg2
+    conn = psycopg2.connect(DATABASE_URL)
+    c = conn.cursor()
+
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS expenses (
+            id SERIAL PRIMARY KEY,
+            name TEXT,
+            account TEXT,
+            description TEXT,
+            amount REAL,
+            category TEXT,
+            where TEXT,
+            date DATE,
+            image_filename TEXT
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+    return "Expenses table created successfully!"
+
+if __name__ == "__main__":
+    app.run(debug=True)
