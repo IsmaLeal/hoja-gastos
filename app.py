@@ -64,29 +64,5 @@ def submit():
 
     return "Submission saved succesfully!"
 
-@app.route("/init-expenses-table")
-def init_expenses_table():
-    import psycopg2
-    conn = psycopg2.connect(DATABASE_URL)
-    c = conn.cursor()
-
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS expenses (
-            id SERIAL PRIMARY KEY,
-            name TEXT,
-            account TEXT,
-            description TEXT,
-            amount REAL,
-            category TEXT,
-            whatfor TEXT,
-            date DATE,
-            image_filename TEXT
-        )
-    """)
-
-    conn.commit()
-    conn.close()
-    return "Expenses table created successfully!"
-
 if __name__ == "__main__":
     app.run(debug=True)
