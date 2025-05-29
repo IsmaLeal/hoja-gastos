@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import os
 import requests
 import psycopg2
@@ -83,9 +83,12 @@ def submit():
 def view_entries():
     conn = psycopg2.connect(DATABASE_URL)
     c = conn.cursor()
-    c.execute("SELECT name, description, amount, category, whatfor, date, image_filename FROM expenses ORDER BY date DESC")
+    c.execute("""
+        SELECT name, description, amount, category, whatfor, date, image_filename, id"
+        FROM expenses
+        ORDER BY date DESC
+    """)
     entries = c.fetchall()
-    print(entries)
     conn.close()
     return render_template("view.html", entries=entries)
 
@@ -117,6 +120,16 @@ def tesoreria():
 
     return render_template("tesoreria.html", people=people)
 
+
+@app.route("/delete", methods=["POST"])
+def delete_entry():
+    entry_id = request.form["entry_id"]
+    conn = psycopg2.connect(DATABASE_URL)
+    c = conn.cursor()
+    c.execute("DELETE FROM expenses WHERE id = %s", (entry_id,))
+    conn.commit()
+    conn.close()
+    return redirect("/view")
 
 
 if __name__ == "__main__":
