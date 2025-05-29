@@ -84,6 +84,7 @@ def view_entries():
     c = conn.cursor()
     c.execute("SELECT name, description, amount, category, whatfor, date, image_filename FROM expenses ORDER BY date DESC")
     entries = c.fetchall()
+    print(entries)
     conn.close()
     return render_template("view.html", entries=entries)
 
