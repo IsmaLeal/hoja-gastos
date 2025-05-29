@@ -9,15 +9,11 @@ app = Flask(__name__)
 
 def upload_image_to_imgur(image_file):
     IMGUR_CLIENT_ID = os.environ.get("IMGUR_CLIENT_ID")
-    headers = {
-        "Authorization": f"Client-ID {IMGUR_CLIENT_ID}"
-    }
+    headers = {"Authorization": f"Client-ID {IMGUR_CLIENT_ID}"}
 
-    files = {
-        "image": image_file.read()
-    }
+    files = {"image": (image_file.filename, image_file.read())}
 
-    response = requests.post("https://api.imgur.com/3/upload", headers=headers, files=files)
+    response = requests.post("https://api.imgur.com/3/image", headers=headers, files=files)
     response_data = response.json()
 
     if response.status_code == 200 and response_data["success"]:
