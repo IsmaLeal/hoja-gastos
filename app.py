@@ -42,7 +42,7 @@ def submit():
     description = request.form["description"]
     amount = float(request.form["amount"])
     category = request.form["category"]
-    where = request.form["where"]
+    whatfor = request.form["whatfor"]
     date = request.form["date"]
 
     # Handle image
@@ -56,9 +56,9 @@ def submit():
     conn = psycopg2.connect(DATABASE_URL)
     c = conn.cursor()
     c.execute("""
-        INSERT INTO expenses (name, account, description, amount, category, where, date, image_filename)
+        INSERT INTO expenses (name, account, description, amount, category, whatfor, date, image_filename)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    """, (name, account, description, amount, category, where, date, image_filename))
+    """, (name, account, description, amount, category, whatfor, date, image_filename))
     conn.commit()
     conn.close()
 
@@ -78,7 +78,7 @@ def init_expenses_table():
             description TEXT,
             amount REAL,
             category TEXT,
-            where TEXT,
+            whatfor TEXT,\\\
             date DATE,
             image_filename TEXT
         )
