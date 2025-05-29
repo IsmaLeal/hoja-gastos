@@ -107,6 +107,7 @@ def tesoreria():
             ORDER BY date DESC
         """, (selected_name,))
         entries = c.fetchall()
+        print(entries)
         conn.close()
 
         total = sum(entry[2] for entry in entries if entry[2] is not None)
