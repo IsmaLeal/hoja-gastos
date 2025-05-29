@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Historial por persona</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>Historial de gastos por persona</h1>
+
+    <form method="POST">
+        <label for="name">Selecciona un nombre:</label>
+        <select name="name" id="name">
+            {% for name in people %}
+                <option value="{{ name }}" {% if name == selected_name %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Ver gastos</button>
+    </form>
+
+    {% if entries %}
+        <h2>Entradas de {{ selected_name }}</h2>
+        <table border="1">
+            <tr>
+                <th>Fecha</th>
+                <th>Cantidad</th>
+                <th>Concepto</th>
+                <th>Imagen</th>
+            </tr>
+            {% for date, amount, whatfor, image_filename in entries %}
+                <tr>
+                    <td>{{ date }}</td>
+                    <td>{{ amount }}</td>
+                    <td>{{ whatfor }}</td>
+                    <td>
+                        {% if image_filename %}
+                            <a href="{{ image_filename }}" target="_blank">Ver imagen</a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    <h3>Total: {{ total }} €</h3>
+    {% endif %}
+</body>
+</html>

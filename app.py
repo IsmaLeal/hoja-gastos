@@ -6,25 +6,7 @@ import psycopg2
 DATABASE_URL = os.environ.get("DATABASE_URL")
 app = Flask(__name__)
 
-
-def upload_image_to_imgur(image_file):
-    IMGUR_CLIENT_ID = os.environ.get("IMGUR_CLIENT_ID")
-    headers = {"Authorization": f"Client-ID {IMGUR_CLIENT_ID}"}
-
-    files = {"image": (image_file.filename, image_file.read())}
-
-    response = requests.post("https://api.imgur.com/3/image", headers=headers, files=files)
-    response_data = response.json()
-
-    if response.status_code == 200 and response_data["success"]:
-        return response_data["data"]["link"]
-    else:
-        raise Exception("Imgur upload failed: " + response_data.get("data", {}).get("error", "Unknown error"))
-
-
-@app.route("/")
-def home():
-    people = {
+people = {
         "ivan gonzalez": "ES7114650100982050375582",
         "gonzalo pousa": "ES0921002904030262057029",
         "ismael leal": "ES6101821294110204237477",
@@ -47,6 +29,25 @@ def home():
         "gonzalo lara": "ES2200730100520742787943",
         "nora manzano": "",
     }
+
+
+def upload_image_to_imgur(image_file):
+    IMGUR_CLIENT_ID = os.environ.get("IMGUR_CLIENT_ID")
+    headers = {"Authorization": f"Client-ID {IMGUR_CLIENT_ID}"}
+
+    files = {"image": (image_file.filename, image_file.read())}
+
+    response = requests.post("https://api.imgur.com/3/image", headers=headers, files=files)
+    response_data = response.json()
+
+    if response.status_code == 200 and response_data["success"]:
+        return response_data["data"]["link"]
+    else:
+        raise Exception("Imgur upload failed: " + response_data.get("data", {}).get("error", "Unknown error"))
+
+
+@app.route("/")
+def home():
     return render_template("index.html", people=people)
 
 @app.route("/submit", methods=["POST"])
@@ -91,8 +92,26 @@ def view_entries():
 
 @app.route("/tesoreria")
 def tesoreria():
-    conn = psycopg2.connect(DATABASE_URL)
-    c = conn.cursor()
+    entries = []
+    total = 0
+    selected_name = None
+
+    if request.method == "POST":
+        selected_name = request.form.get("name")
+        conn = psycopg2.connect(DATABASE_URL)
+        c = conn.cursor()
+        c.execute("""
+        SELECT date, amount, whatfor, image_filename
+        FROM expenses
+        WHERE LOWER(name) = LOWER(%s)
+        ORDER BY date DESC
+        """, (selected_name,))
+        entries = c.fetchall()
+        conn.close()
+
+        total = sum(entry[1] for entry in entries if entry[1] is not None)
+
+    return render_template("tesoreria.html", people=people.keys(), entries=entries, total=total, selected_name=selected_name)
 
 
 
