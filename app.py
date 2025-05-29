@@ -112,10 +112,10 @@ def tesoreria():
 
         total = sum(entry[2] for entry in entries if entry[2] is not None)
 
-        return render_template("tesoreria.html", people=people.keys(), entries=entries, selected_name=selected_name,
+        return render_template("tesoreria.html", people=people, entries=entries, selected_name=selected_name,
                                total=total)
 
-    return render_template("tesoreria.html", people=people.keys())
+    return render_template("tesoreria.html", people=people)
 
 
 

@@ -28,7 +28,7 @@
     <form action="/tesoreria" method="POST">
         <label for="name">Selecciona un nombre:</label>
         <select name="name" id="name">
-            {% for name in people %}
+            {% for name in people.keys() %}
                 <option value="{{ name }}" {% if name == selected_name %}selected{% endif %}>{{ name }}</option>
             {% endfor %}
         </select>
@@ -59,7 +59,7 @@
                 </tr>
             {% endfor %}
         </table>
-    <h3>Total: {{ total }} € a la cuenta: {{ account }}.</h3>
+    <h3>Total: {{ total }} € a la cuenta: {{ people[selected_name]s }}.</h3>
     {% endif %}
 </body>
 </html>
