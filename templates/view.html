@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Gastos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById("sidebar");
@@ -19,7 +21,7 @@
     </div>
 
     <div class="tobpar">
-        <span class="hamburger" onclick="toggleSidebar()">&#9976;</span>
+        <span class="hamburger" onclick="toggleSidebar()">&#9776;</span>
     </div>
     <h1>Entradas registradas</h1>
     <ul>
