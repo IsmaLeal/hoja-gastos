@@ -110,13 +110,14 @@ def tesoreria():
             ORDER BY date DESC
         """, (selected_name,))
         entries = c.fetchall()
-        print(entries)
+
+        accounts_used = set(entry[1] for entry in entries)
         conn.close()
 
         total = sum(entry[2] for entry in entries if entry[2] is not None)
 
         return render_template("tesoreria.html", people=people, entries=entries, selected_name=selected_name,
-                               total=total)
+                               total=total, accounts_used=accounts_used)
 
     return render_template("tesoreria.html", people=people)
 

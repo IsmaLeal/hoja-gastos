@@ -43,6 +43,9 @@
                 <th>Cantidad</th>
                 <th>Concepto</th>
                 <th>Imagen</th>
+                {% if accounts_used|length > 1 %}
+                    <th>Cuenta</th>
+                {% endif %}
             </tr>
             {% for date, account, amount, whatfor, image_filename in entries %}
                 <tr>
@@ -56,10 +59,17 @@
                             -
                         {% endif %}
                     </td>
+                    {% if accounts_used|length > 1 %}
+                        <td>{{ account }}</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>
-    <h3>Total: {{ total }} € a la cuenta: {{ people.get(selected_name, "No disponible") }}.</h3>
+        {% if accounts_used|length == 1 %}
+            <h3>Total: {{ total }} € a la cuenta {{accounts_used|list|first }}.</h3>
+        {% else %}
+            <h3>Total: {{ total }} € (varias cuentas bancarias utilizadas).</h3>
+        {% endif %}
     {% endif %}
 </body>
 </html>
