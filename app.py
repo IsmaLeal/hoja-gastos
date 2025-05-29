@@ -75,7 +75,7 @@ def submit():
     conn.commit()
     conn.close()
 
-    return "Submission saved succesfully!"
+    return render_template("index.html", message="Submission saved succesfully!")
 
 
 @app.route("/view")
@@ -87,6 +87,13 @@ def view_entries():
     print(entries)
     conn.close()
     return render_template("view.html", entries=entries)
+
+
+@app.route("/tesoreria")
+def tesoreria():
+    conn = psycopg2.connect(DATABASE_URL)
+    c = conn.cursor()
+
 
 
 if __name__ == "__main__":

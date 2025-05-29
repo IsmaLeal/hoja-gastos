@@ -32,8 +32,28 @@
             accountInput.readOnly = useCheckbox.checked;
         }
     </script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            sidebar.style.width = sidebar.style.width === "250px" ? "0" : "250px";
+        }
+    </script>
 </head>
 <body>
+    {% if message %}
+        <p style="color:green;">{{ message }}</p>
+    {% endif %}
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
+        <a href="/">Inicio</a>
+        <a href="/view">Confirmar últimas entradas</a>
+        <a href="/tesoreria">Tesorería</a>
+    </div>
+
+    <div class="tobpar">
+        <span class="hamburger" onclick="toggleSidebar()">&#9976;</span>
+    </div>
+
     <div class="container">
         <h1>Hoja de Gastos</h1>
         <form action="/submit" method="POST" enctype="multipart/form-data">
