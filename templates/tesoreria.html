@@ -59,7 +59,7 @@
                 </tr>
             {% endfor %}
         </table>
-    <h3>Total: {{ total }} € a la cuenta: {{ people[selected_name]s }}.</h3>
+    <h3>Total: {{ total }} € a la cuenta: {{ people.get(selected_name, "No disponible") }}.</h3>
     {% endif %}
 </body>
 </html>
