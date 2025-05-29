@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gastos</title>
+</head>
+<body>
+    <h1>Entradas registradas</h1>
+    <ul>
+        {% for entry in entries %}
+            <li>
+                <strong>{{ entry[0] }}</strong> gastó <strong>{{ entry[2] }}</strong>€ en "{{ entry[1] }}" para {{ entry[4] }} el {{ entry[5] }}.
+                {% if entry[6] %}
+                    <a href="{{ entry[6] }}" target="_blank">Ver imagen</a><br>
+                    <img src="{{ entry[6] }}" style="max-height:100px;">
+                {% endif %}
+            </li>
+        {% end for %}
+    </ul>
+</body>
+</html>
