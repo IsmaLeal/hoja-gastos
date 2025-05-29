@@ -8,6 +8,11 @@ import psycopg2
 DATABASE_URL = os.environ.get("DATABASE_URL")
 app = Flask(__name__)
 
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
 @app.route("/")
 def home():
     people = {
@@ -50,7 +55,7 @@ def submit():
     image_filename = None
     if image and image.filename:
         image_filename = secure_filename(image.filename)
-        image.save(os.path.join("uploads", image_filename))
+        image.save(os.path.join(app.config["UPLOAD_FOLDER"], image_filename))
 
     # Save to PostgreSQL
     conn = psycopg2.connect(DATABASE_URL)
