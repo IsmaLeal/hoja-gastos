@@ -90,7 +90,7 @@ def view_entries():
     return render_template("view.html", entries=entries)
 
 
-@app.route("/tesoreria")
+@app.route("/tesoreria", methods=["GET", "POST"])
 def tesoreria():
     entries = []
     total = 0
@@ -101,17 +101,20 @@ def tesoreria():
         conn = psycopg2.connect(DATABASE_URL)
         c = conn.cursor()
         c.execute("""
-        SELECT date, amount, whatfor, image_filename
-        FROM expenses
-        WHERE LOWER(name) = LOWER(%s)
-        ORDER BY date DESC
+            SELECT date, amount, whatfor, image_filename
+            FROM expenses
+            WHERE LOWER(name) = LOWER(%s)
+            ORDER BY date DESC
         """, (selected_name,))
         entries = c.fetchall()
         conn.close()
 
         total = sum(entry[1] for entry in entries if entry[1] is not None)
 
-    return render_template("tesoreria.html", people=people.keys(), entries=entries, total=total, selected_name=selected_name)
+        return render_template("tesoreria.html", people=people.keys(), entries=entries, selected_name=selected_name,
+                               total=total)
+
+    return render_template("tesoreria.html", people=people.keys())
 
 
 
