@@ -34,7 +34,7 @@
                 {% endif %}
                 <form action="/delete" method="POST" style="display:inline;">
                     <input type="hidden" name="entry_id" value="{{ entry[7] }}">
-                    <button type="submit"></button>
+                    <button type="submit" onclick="return confirm('¿Estás seguro/a/x de que quieres borrar esta entrada?')">🗑️</button>
                 </form>
             </li>
         {% endfor %}
