@@ -1,17 +1,30 @@
 from flask import Flask, render_template, request
 import os
-from werkzeug.utils import secure_filename
-from datetime import datetime, timedelta
-import csv
+import requests
 import psycopg2
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 app = Flask(__name__)
 
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+def upload_image_to_imgur(image_file):
+    IMGUR_CLIENT_ID = os.environ.get("IMGUR_CLIENT_ID")
+    headers = {
+        "Authorization": f"Client-ID {IMGUR_CLIENT_ID}"
+    }
+
+    files = {
+        "image": image_file.read()
+    }
+
+    response = requests.post("https://api.imgur.com/3/upload", headers=headers, files=files)
+    response_data = response.json()
+
+    if response.status_code == 200 and response_data["success"]:
+        return response_data["data"]["link"]
+    else:
+        raise Exception("Imgur upload failed: " + response_data.get("data", {}).get("error", "Unknown error"))
+
 
 @app.route("/")
 def home():
@@ -52,10 +65,9 @@ def submit():
 
     # Handle image
     image = request.files.get("image")
-    image_filename = None
+    image_url = None
     if image and image.filename:
-        image_filename = secure_filename(image.filename)
-        image.save(os.path.join(app.config["UPLOAD_FOLDER"], image_filename))
+        image_url = upload_image_to_imgur(image)
 
     # Save to PostgreSQL
     conn = psycopg2.connect(DATABASE_URL)
@@ -63,7 +75,7 @@ def submit():
     c.execute("""
         INSERT INTO expenses (name, account, description, amount, category, whatfor, date, image_filename)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    """, (name, account, description, amount, category, whatfor, date, image_filename))
+    """, (name, account, description, amount, category, whatfor, date, image_url))
     conn.commit()
     conn.close()
 
