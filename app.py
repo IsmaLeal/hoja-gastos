@@ -51,6 +51,7 @@ def upload_image_to_imgur(image_file):
 
 @app.route("/")
 def home():
+    print(f"Connected to: {DATABASE_URL}")
     return render_template("index.html", people=people)
 
 @app.route("/submit", methods=["POST"])
