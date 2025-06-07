@@ -6,6 +6,13 @@
     text-align: justify;
 }
 
+.centerimage {
+    display: inline-block;
+    height: 15rem;
+    width: auto;
+    margin: 1rem;
+}
+
 /* Sidebar styling */
 .sidebar {
     height: 100%;
