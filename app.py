@@ -33,6 +33,7 @@ USERS = {
         "lucia alarcon": "luciagsnalarcon669",
         "gonzalo lara": "gonzalogsnlara669",
         "nora manzano": "noragsnmanzano669",
+        "developer": "developer669"
     }
 
 people = {
