@@ -56,8 +56,8 @@ form {
     font-weight: bold;
 }
 
-.form-group input,
-.form-group select {
+.form-group input:focus,
+.form-group select:focus {
     flex: 2;
     padding: 0.4rem;
     border: 1px solid #243d85;
@@ -69,9 +69,15 @@ form {
     margin-left: auto;
 }
 
+input:focus, select:focus {
+    border-color: #243d85;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 button[type="submit"] {
     padding: 0.6rem 1.2rem;
-    background-color: #4caf50;
+    background-color: #243d85;
     color: white;
     border: none;
     border-radius: 6px;
@@ -82,7 +88,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #051850;
     transform: scale(1.03);
 }
 
@@ -108,12 +114,6 @@ button[type="submit"]:hover {
 
 .nav-link:hover {
     color: #007bff;
-}
-
-input:focus, select:focus {
-    border-color: #4caf50;
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Sidebar styling */
