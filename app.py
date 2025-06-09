@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, url_for
 import os
 import requests
 import psycopg2
@@ -8,6 +8,31 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 app = Flask(__name__)
+
+# Predefined allowed users
+USERS = {
+        "ivan gonzalez": "ivangsngonzalez669",
+        "gonzalo pousa": "gonzalogsnpousa669",
+        "ismael leal": "ismaelgsnleal669",
+        "maria bravo": "mariagsnbravo669",
+        "nuria gomez": "nuriagsngomez669",
+        "lola damgaard": "lolagsndamgaard669",
+        "cyntia fritz": "cyntiagsnfritz669",
+        "sebastian gonzalez": "sebastiangsngonzalez669",
+        "sara jimenez": "saragsnjimenez669",
+        "irune de miguel": "irunegsndemiguel669",
+        "pablo cabarcos": "pablogsncabarcos669",
+        "eva gomez": "evagsngomez669",
+        "miguel ruiz": "miguelgsnruiz669",
+        "ruben garcia": "rubengsngarcia669",
+        "ivan martin": "ivangsnmartin669",
+        "laura diaz": "lauragsndiaz669",
+        "alem": "alemgsn669",
+        "luna miralles": "lunagsnmiralles669",
+        "lucia alarcon": "luciagsnalarcon669",
+        "gonzalo lara": "gonzalogsnlara669",
+        "nora manzano": "noragsnmanzano669",
+    }
 
 people = {
         "ivan gonzalez": "ES7114650100982050375582",
@@ -53,6 +78,29 @@ def upload_image_to_imgur(image_file):
 def home():
     print(f"Connected to: {DATABASE_URL}")
     return render_template("index.html", people=people)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if username in USERS and USERS[username] == password:
+            session["user"] = username
+            return redirect(url_for("home"))
+        else:
+            return render_template("login.html", error="Oh Pepa!!\nCredenciales incorrectos")
+        return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect("/login")
+
+@app.before_request
+def require_login():
+    allowed_routes = ["login", "static"]
+    if "user" not in session and request.endpoint not in allowed_routes:
+        return redirect(url_for("login"))
 
 @app.route("/submit", methods=["POST"])
 def submit():

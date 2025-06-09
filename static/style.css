@@ -85,20 +85,6 @@ input:focus, select:focus {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    font-family: Aleo, sans-serif;
-    box-sizing: border-box;
-    text-align: justify;
-}
-
-.centerimage {
-    height: 15rem;
-    width: auto;
-    margin: 1rem;
-}
-
 /* Sidebar styling */
 .sidebar {
     height: 100%;

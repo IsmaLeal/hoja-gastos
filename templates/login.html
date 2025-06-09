@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio de sesión</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            background-color: white;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        input { margin-bottom: 1em; width: 100%; padding: 0.5em; }
+        button { width: 100%; padding: 0.5em; background-color: #388e3c; color: white; border: none; border-radius: 5px; }
+        .error {color: red; margin-bottom: 1em; }
+    </style>
+</head>
+<body>
+    <form method="POST">
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <h1>A ver... ¡identifíquense!</h1>
+        <input type="text" name="username" placeholder="nombre apellido (minúscula y sin tilde, con espacio entre medias)" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <button type="submit">Entrar</button>
+    </form>
+</body>
+</html>

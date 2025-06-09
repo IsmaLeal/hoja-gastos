@@ -41,13 +41,14 @@
 </head>
 <body>
     {% if message %}
-        <p style="color:green;">{{ message }}</p>
+        <p style="color:#4cde4c;">{{ message }}</p>
     {% endif %}
     <div id="sidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
         <a href="/">Inicio</a>
         <a href="/view">Confirmar últimas entradas</a>
         <a href="/tesoreria">Tesorería</a>
+        <a href="/logout" style="color: #cc2626;">Cerrar sesión :(</a>
     </div>
 
     <div class="tobpar">
