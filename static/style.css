@@ -66,17 +66,12 @@ form {
 .form-group input:focus,
 .form-group select:focus {
     border: 3px solid #243d85;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-group input[type="checkbox"] {
     flex: none;
     margin-left: auto;
-}
-
-input:focus, select:focus {
-    border-color: #243d85;
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 button[type="submit"] {
