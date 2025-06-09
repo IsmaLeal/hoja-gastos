@@ -133,7 +133,7 @@ input:focus, select:focus {
 }
 
 .sidebar a:hover {
-    background-color: #575757;
+    background-color: #df8203;
 }
 
 .closebtn {
@@ -148,7 +148,7 @@ input:focus, select:focus {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #f4f4f4;
+    background-color: #163181;
     padding: 10px 20px;
     height: 40px;
 }
