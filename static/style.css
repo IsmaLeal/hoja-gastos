@@ -82,6 +82,7 @@ button[type="submit"]:hover {
 .logoimage {
     height: 7rem;
     width: auto;
+    margin-bottom: 0.2rem;
 }
 
 .logo {
@@ -89,20 +90,11 @@ button[type="submit"]:hover {
     margin: 0;
 }
 
-.logo-container {
-    display:  flex;
-    align-items: center;
-    gap: 10px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
 .nav-link {
+    margin-left: auto;
     text-decoration: none;
     font-weight: bold;
     color: #1a1a1a;
-    white-space: nowrap;
     transition: color 0.3s ease;
 }
 
@@ -158,8 +150,27 @@ input:focus, select:focus {
     background-color: #f4f4f4;
     padding: 10px 20px;
     height: 40px;
-    position: relative;
-    z-index: 100;
+}
+
+.topbar-left,
+.topbar-center,
+.topbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.topbar-left {
+    justify-content: flex-start;
+}
+
+.topbar-center {
+    flex-direction: column;
+    text-align: center;
+    flex: 1;
+}
+
+.topbar-right {
+    justify-content: flex-end;
 }
 
 .hamburger {
