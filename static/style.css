@@ -79,6 +79,12 @@ button[type="submit"]:hover {
     margin: 1rem;
 }
 
+.logoimage {
+    height: 4rem;
+    width: auto;
+    margin: 2rem;
+}
+
 input:focus, select:focus {
     border-color: #4caf50;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
