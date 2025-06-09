@@ -89,14 +89,15 @@ button[type="submit"]:hover {
     font-size: 1.2rem;
     margin: 0;
 }
-
 .nav-link {
     margin-left: auto;
     text-decoration: none;
     font-weight: bold;
     color: #1a1a1a;
     transition: color 0.3s ease;
+    line-height: 1;
 }
+
 
 .nav-link:hover {
     color: #007bff;
@@ -157,6 +158,8 @@ input:focus, select:focus {
 .topbar-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    height: 100%;
 }
 
 .topbar-left {
