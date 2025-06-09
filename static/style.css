@@ -40,7 +40,6 @@ form {
 }
 
 .form-group {
-    background-color: rgba(223, 130, 3, 0.66);
     padding: 1rem;
     border-radius: 8px;
     display: flex;
