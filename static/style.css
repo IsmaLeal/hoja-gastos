@@ -7,8 +7,21 @@
 }
 
 body {
-    background-color: #163181;
+    background-color: #243d85;
     padding: 2rem;
+}
+
+h1 {
+    color: #000000;
+}
+
+.centerimage {
+    display: block;
+    height: 15rem;
+    width: auto;
+    margin: auto;
+    padding-top: 13px;
+    padding-bottom: 13px;
 }
 
 .container {
@@ -27,7 +40,7 @@ form {
 }
 
 .form-group {
-    background-color: #e8f0fe;
+    background-color: #df8203;
     padding: 1rem;
     border-radius: 8px;
     display: flex;
@@ -47,7 +60,7 @@ form {
 .form-group select {
     flex: 2;
     padding: 0.4rem;
-    border: 1px solid #ccc;
+    border: 1px solid #243d85;
     border-radius: 5px;
 }
 
@@ -71,12 +84,6 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #45a049;
     transform: scale(1.03);
-}
-
-.centerimage {
-    height: 15rem;
-    width: auto;
-    margin: 1rem;
 }
 
 .logoimage {
@@ -148,7 +155,7 @@ input:focus, select:focus {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #163181;
+    background-color: #243d85;
     padding: 80px 20px;
     height: 40px;
 }
@@ -168,7 +175,7 @@ input:focus, select:focus {
 .topbar-center {
     flex-direction: column;
     text-align: center;
-    margin-bottom: 8rem;
+    margin-bottom: 10rem;
 }
 
 .topbar-right {
