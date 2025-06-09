@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #243d85;
+    background-color: white;
     padding: 2rem;
 }
 
@@ -25,7 +25,7 @@ h1 {
 }
 
 .container {
-    background-color: #df8203;
+    background-color: rgba(223, 130, 3, 0.66);
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -40,7 +40,7 @@ form {
 }
 
 .form-group {
-    background-color: #df8203;
+    background-color: rgba(223, 130, 3, 0.66);
     padding: 1rem;
     border-radius: 8px;
     display: flex;
@@ -140,7 +140,7 @@ button[type="submit"]:hover {
 }
 
 .sidebar a:hover {
-    background-color: #df8203;
+    background-color: rgba(223, 130, 3, 0.66);
 }
 
 .closebtn {
@@ -155,7 +155,7 @@ button[type="submit"]:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #243d85;
+    background-color: white;
     padding: 80px 20px;
     height: 40px;
 }
