@@ -90,6 +90,19 @@ button[type="submit"]:hover {
     transform: scale(1.03);
 }
 
+.deletebutton {
+    background-color: #a11010;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.deletebutton:hover {
+    background-color: #ff0000;
+}
+
 .logoimage {
     height: 7rem;
     width: auto;
