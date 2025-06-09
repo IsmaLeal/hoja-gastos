@@ -132,6 +132,20 @@ def submit():
 
     return render_template("index.html", message="Submission saved succesfully!", people=people)
 
+@app.route("/dates", methods=["GET", "POST"])
+def dates():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if username in USERS and USERS[username] == password:
+            session["user"] = username
+            return redirect(url_for("home"))
+        else:
+            return render_template("login.html", error="Oh Pepa!!\nCredenciales incorrectos")
+    return render_template("login.html")
+    term1 = request.form["Primer trimestre"]
+    term2 = request.form["Segundo trimestre"]
+    term3 = request.form["Tercer trimestre"]
 
 @app.route("/view")
 def view_entries():
