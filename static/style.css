@@ -65,16 +65,24 @@ button[type="submit"] {
     font-size: 1rem;
     cursor: pointer;
     align-self: flex-end;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button[type="submit"]:hover {
     background-color: #45a049;
+    transform: scale(1.03);
 }
 
 .centerimage {
     height: 15rem;
     width: auto;
     margin: 1rem;
+}
+
+input:focus, select:focus {
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Sidebar styling */
