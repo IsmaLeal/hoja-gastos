@@ -94,7 +94,6 @@ button[type="submit"]:hover {
     display:  flex;
     align-items: center;
     gap: 10px;
-    text-align: left;
     flex-grow: 1;
     justify-content: center;
 }
@@ -104,7 +103,6 @@ button[type="submit"]:hover {
     font-weight: bold;
     color: #1a1a1a;
     white-space: nowrap;
-    margin-left: auto;
     transition: color 0.3s ease;
 }
 
@@ -154,14 +152,13 @@ input:focus, select:focus {
 
 /* Topbar for hamburger icon */
 .topbar {
-    background-color: #f4f4f4;
-    padding: 10px 20px;
-    height: 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: #f4f4f4;
+    padding: 10px 20px;
+    height: 40px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    gap: 1rem;
 }
 
 .hamburger {
