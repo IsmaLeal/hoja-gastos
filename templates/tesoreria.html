@@ -97,8 +97,11 @@
             el.addEventListener("change", tryAutoSubmit);
         });
     </script>
-
-    <button onclick="alert('Botón completamente inútil.')">Enviar</button>
+    <form onsubmit="return false;">
+        <button type="submit" onclick="alert('Botón completamente inútil. Como tú.'); reutn false;">
+            Enviar
+        </button>
+    </form>
 
     {% if entries %}
         <h2>Entradas de {{ selected_name }}</h2>
