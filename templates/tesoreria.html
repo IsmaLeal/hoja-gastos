@@ -37,6 +37,7 @@
         <label for="ronda">Ronda:</label>
         <select name="ronda" id="ronda"></select>
         <script>
+            const selectedRonda = "{{ ronda | default('') }}";
             const select = document.getElementById("ronda");
             const currentYear = new Date().getFullYear();
             const startYear = 22;
@@ -49,7 +50,7 @@
                 option.value = label;
                 option.text = label;
 
-                if (label === selected_ronda) {
+                if (label === selected_ronda || (selectedRonda === "" && y === currentYearShort)) {
                     option.selected = true;
                 }
                 select.appendChild(option);
