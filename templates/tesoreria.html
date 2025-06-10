@@ -29,6 +29,7 @@
     <form action="/tesoreria" method="POST">
         <label for="name">Selecciona un nombre:</label>
         <select name="name" id="name">
+            <option disabled {% if not selected_name %}selected{% endif %}>vava, elige a quien te mole</option>
             {% for name in people.keys() %}
                 <option value="{{ name }}" {% if name == selected_name %}selected{% endif %}>{{ name }}</option>
             {% endfor %}
@@ -67,13 +68,6 @@
             }
         </script>
 
-<!--        <label for="term">Trimestre:</label>-->
-<!--        <select name="term" id="term">-->
-<!--            <option value="term1" {% if term == "term1" %}selected{% endif %}>Primer trimestre</option>-->
-<!--            <option value="term2" {% if term == "term2" %}selected{% endif %}>Segundo trimestre</option>-->
-<!--            <option value="term3" {% if term == "term3" %}selected{% endif %}>Tercer trimestre</option>-->
-<!--        </select>-->
-
         <div class="term-selector">
             <input type="radio" id="term1" name="term" value="term1" {% if term == "term1" %}checked{% endif %}>
             <label for="term1">Primer trimestre</label>
@@ -86,6 +80,24 @@
         </div>
         <button type="submit">Ver gastos</button>
     </form>
+
+    <script>
+        function tryAutoSubmit() {
+            const form = document.querySelector("form");
+            const name = document.getElementById("name")?.value;
+            const term = document.querySelector("input[name='term']:checked")?.value;
+            const ronda = document.querySelector("input[name='ronda']:checked")?.value;
+
+            if (name && term && ronda) {
+                form.submit();
+            }
+        }
+
+        document.getElementById("name").addEventListener("change", tryAutoSubmit);
+        document.querySelector("input[name='term'], input[name='ronda']").forEach(el => {
+            el.addEventListener("change", tryAutoSubmit);
+        });
+    </script>
 
     {% if entries %}
         <h2>Entradas de {{ selected_name }}</h2>

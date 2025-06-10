@@ -232,7 +232,7 @@ button[type="submit"]:hover {
     cursor: pointer;
 }
 
-.ronda-selector input[type="radiuo"]:checked + label {
+.ronda-selector input[type="radio"]:checked + label {
     background: rgba(223, 130, 3, 0.66);
     color: white;
     font-weight: bold;
