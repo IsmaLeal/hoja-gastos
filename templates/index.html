@@ -44,6 +44,10 @@
         <p style="color:#4cde4c;">{{ message }}</p>
     {% endif %}
 
+    {% if error %}
+        <p style="color:black; background-color:yellow;"> {{ error }}</p>
+    {% endif %}
+
     <!-- Expandable sidebar -->
     <div id="sidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>

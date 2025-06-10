@@ -16,7 +16,36 @@
         <h2>Selecciona las fechas de inicio de cada trimestre para esta ronda</h2>
         <img style="width:8rem; height: auto;" alt="calendar_pic" src="../static/calendar.jpeg">
 
-        <form action="/" method="POST" enctype="multipart/form-data"></form>
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <p>Primer trimestre!</p>
+                <label for="term1-start"> Inicio primer trimestre</label>
+                <input type="date" id="term1-start" name="term1-start">
+            </div>
+
+            <div class="form-group">
+                <p>Segundo trimestre!</p>
+                <label for="term2-start"> Inicio segundo trimestre</label>
+                <input type="date" id="term2-start" name="term2-start">
+            </div>
+
+            <div class="form-group">
+                <p>Tercer trimestre!</p>
+                <label for="term3-start"> Inicio tercer trimestre</label>
+                <input type="date" id="term3-start" name="term3-start">
+            </div>
+
+            <button type="submit">Establecer</button>
+        </form>
+
+        <p>
+            Hasta que este formulario no vuelva a rellenarse, las fechas quedarán así.
+
+            Los gastos de cada scouter se agruparán por trimestre en función de cuándo se hayan efectuado. Tesorería
+            luego tendrá 15 días tras el inicio del siguiente trimestre para efectuar los pagos. Pasados estos primeros
+            15 días de un trimestre, los datos de los gastos del trimestre anterior se borrarán. Por tanto, es fundamental
+            que Tesorería se encargue de efectuar los pagos antes de los primeros 15 días de cada trimestre.
+        </p>
     </div>
 </body>
 </html>

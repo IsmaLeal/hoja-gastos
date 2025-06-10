@@ -83,11 +83,11 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        username = request.form["username"]
+    if request.method == "POST":            # After submitting the login
+        username = request.form["username"] # Check username and password agree
         password = request.form["password"]
         if username in USERS and USERS[username] == password:
-            session["user"] = username
+            session["user"] = username      # Store username in `session` and redirect
             return redirect(url_for("home"))
         else:
             return render_template("login.html", error="Oh Pepa!!\nCredenciales incorrectos")
@@ -134,18 +134,14 @@ def submit():
 
 @app.route("/dates", methods=["GET", "POST"])
 def dates():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        if username in USERS and USERS[username] == password:
-            session["user"] = username
-            return redirect(url_for("home"))
-        else:
-            return render_template("login.html", error="Oh Pepa!!\nCredenciales incorrectos")
-    return render_template("login.html")
-    term1 = request.form["Primer trimestre"]
-    term2 = request.form["Segundo trimestre"]
-    term3 = request.form["Tercer trimestre"]
+    if session["user"] == "developer":
+        term1 = request.form["Primer trimestre"]
+        term2 = request.form["Segundo trimestre"]
+        term3 = request.form["Tercer trimestre"]
+    else:
+        return render_template("index.html", error="Oh Pepa!!\nNo la líes")
+
+
 
 @app.route("/view")
 def view_entries():
