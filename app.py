@@ -3,6 +3,7 @@ import os
 import requests
 import psycopg2
 from dotenv import load_dotenv
+from datetime import date
 
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -59,6 +60,43 @@ people = {
         "gonzalo lara": "ES2200730100520742787943",
         "nora manzano": "",
     }
+
+
+def save_term_dates(term1, term2, term3, year):
+    conn = psycopg2.connect(DATABASE_URL)
+    c = conn.cursor()
+
+    # Avoid duplicates
+    c.execute("DELETE FROM term_dates WHERE year = %s", (year,))
+    c.execute("""
+        INSERT INTO term_dates (year, term1, term2, term3)
+        VALUES (%s, %s, %s, %s)
+    """, (year, term1, term2, term3))
+
+    conn.commit()
+    conn.close()
+
+
+def load_term_dates():
+    conn = psycopg2.connect(DATABASE_URL)
+    c = conn.cursor()
+    current_year = date.today().year
+    c.execute("""
+        SELECT term1, term2, term3 FROM term_dates
+        WHERE year = %s
+    """, (current_year,))
+    result = c.fetchone()
+    conn.close()
+
+    if result:
+        term1, term2, term3 = result
+        return {
+            "term1": term1,
+            "term2": term2,
+            "term3": term3,
+        }
+    else:
+        raise Exception("Terms not set for the current year.")
 
 
 def upload_image_to_imgur(image_file):
@@ -140,6 +178,8 @@ def dates():
             term2 = request.form["term2"]
             term3 = request.form["term3"]
 
+            save_term_dates(term1, term2, term3, date.today().year)
+
             return render_template("index.html", people=people)
         else:   # If "GET", show `dates.html`
             return render_template("dates.html")
@@ -170,14 +210,26 @@ def tesoreria():
 
     if request.method == "POST":
         selected_name = request.form.get("name")
+        term_dates = load_term_dates()
+
+        # Determine current term start
+        today = date.today()
+        if today >= term_dates["term3"]:
+            current_term_start = term_dates["term3"]
+        elif today >= term_dates["term2"]:
+            current_term_start = term_dates["term2"]
+        else:
+            current_term_start = term_dates["term1"]
+
         conn = psycopg2.connect(DATABASE_URL)
         c = conn.cursor()
         c.execute("""
             SELECT date, account, amount, whatfor, image_filename
             FROM expenses
             WHERE LOWER(name) = LOWER(%s)
+            AND date >= %s
             ORDER BY date DESC
-        """, (selected_name,))
+        """, (selected_name, current_term_start))
         entries = c.fetchall()
 
         accounts_used = set(entry[1] for entry in entries)
