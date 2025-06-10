@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 import os
+import re
 import requests
 import psycopg2
 from dotenv import load_dotenv
-from datetime import date
+from datetime import date, datetime
 
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -178,7 +179,7 @@ def dates():
             term2 = request.form["term2"]
             term3 = request.form["term3"]
 
-            save_term_dates(term1, term2, term3, date.today().year)
+            save_term_dates(term1, term2, term3, datetime.strptime(term1, "%Y-%m-%d").date().year)
 
             return render_template("index.html", people=people)
         else:   # If "GET", show `dates.html`
@@ -207,19 +208,45 @@ def tesoreria():
     entries = []
     total = 0
     selected_name = None
+    term = None
+    year = None
 
     if request.method == "POST":
         selected_name = request.form.get("name")
-        term_dates = load_term_dates()
-
-        # Determine current term start
-        today = date.today()
-        if today >= term_dates["term3"]:
-            current_term_start = term_dates["term3"]
-        elif today >= term_dates["term2"]:
-            current_term_start = term_dates["term2"]
+        term = request.form.get("term")
+        ronda = request.form.get("ronda")
+        match = re.search(r"Ronda (\d{2})/\d{2}", ronda)
+        if match:
+            year_prefix = int(match.group(1))
+            year = 2000 + year_prefix
         else:
-            current_term_start = term_dates["term1"]
+            raise ValueError("Invalid Ronda number.")
+
+        conn = psycopg2.connect(DATABASE_URL)
+        c = conn.cursor()
+        c.execute("""
+            SELECT term1, term2, term3 FROM term_dates WHERE year = %s
+        """, (year,))
+        result = c.fetchone()
+        conn.close()
+
+        if not result:
+            return render_template("tesoreria.html", people=people, error="No term dates for that year.")
+
+        term1, term2, term3 = result
+        term_starts = {
+            "term1": term1,
+            "term2": term2,
+            "term3": term3
+        }
+        term_order = ["term1", "term2", "term3"]
+
+        try:
+            start_date = term_starts[term]
+            next_index = term_order.index(term) + 1
+            end_date = term_starts[term_order[next_index]] if next_index < len(term_order) else date(year + 1, 9, 1)
+        except Exception as e:
+            return render_template("tesoreria.html", people=people, error=e)
 
         conn = psycopg2.connect(DATABASE_URL)
         c = conn.cursor()
@@ -227,18 +254,17 @@ def tesoreria():
             SELECT date, account, amount, whatfor, image_filename
             FROM expenses
             WHERE LOWER(name) = LOWER(%s)
-            AND date >= %s
+            AND date >= %s AND date < %s
             ORDER BY date DESC
-        """, (selected_name, current_term_start))
+        """, (selected_name, start_date, end_date))
         entries = c.fetchall()
-
-        accounts_used = set(entry[1] for entry in entries)
         conn.close()
 
+        accounts_used = set(entry[1] for entry in entries)
         total = sum(entry[2] for entry in entries if entry[2] is not None)
 
         return render_template("tesoreria.html", people=people, entries=entries, selected_name=selected_name,
-                               total=total, accounts_used=accounts_used)
+                               total=total, accounts_used=accounts_used, term=term)
 
     return render_template("tesoreria.html", people=people)
 

@@ -33,6 +33,31 @@
                 <option value="{{ name }}" {% if name == selected_name %}selected{% endif %}>{{ name }}</option>
             {% endfor %}
         </select>
+
+        <label for="ronda">Ronda:</label>
+        <select name="ronda" id="ronda"></select>
+        <script>
+            const select = document.getElementById("ronda");
+            const currentYear = new Date().getFullYear();
+
+            const startYear = 22;
+            const currentYearShort = currentYear % 100;
+
+            for(let y = startYear; y <= currentYearShort; y++) {
+                let next = (y + 1) % 100;
+                let option = document.createElement('option');
+                option.value = `Ronda ${y}/${next < 10 ? '0' + next : next}`;
+                option.text = `Ronda ${y}/${next < 10 ? '0' + next : next}`;
+                select.appendChild(option);
+            }
+        </script>
+
+        <label for="term">Trimestre:</label>
+        <select name="term" id="term">
+            <option value="term1" {% if term == "term1" %}selected{% endif %}>Primer trimestre</option>
+            <option value="term2" {% if term == "term2" %}selected{% endif %}>Segundo trimestre</option>
+            <option value="term3" {% if term == "term3" %}selected{% endif %}>Tercer trimestre</option>
+        </select>
         <button type="submit">Ver gastos</button>
     </form>
 
