@@ -93,7 +93,7 @@
         }
 
         document.getElementById("name").addEventListener("change", tryAutoSubmit);
-        document.querySelector("input[name='term'], input[name='ronda']").forEach(el => {
+        document.querySelectorAll("input[name='term'], input[name='ronda']").forEach(el => {
             el.addEventListener("change", tryAutoSubmit);
         });
     </script>
