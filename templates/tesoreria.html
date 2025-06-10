@@ -35,7 +35,7 @@
         </select>
 
         <label for="ronda">Ronda:</label>
-        <select class="ronda-selector" id="ronda"></select>
+        <div class="ronda-selector" id="ronda"></div>
         <script>
             const selectedRonda = "{{ selected_ronda | default('') }}";
             const container = document.getElementById("ronda");
