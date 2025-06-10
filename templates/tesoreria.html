@@ -135,7 +135,7 @@
         {% endif %}
     {% endif %}
 
-    {% if total == 0 %}
+    {% if not total or total == 0 %}
     <h1>
         No hay gastos de este jambo/jamba en estas fechas loco prueba otras o supéralo ya.
     </h1>
