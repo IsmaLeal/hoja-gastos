@@ -135,13 +135,13 @@ def submit():
 @app.route("/dates", methods=["GET", "POST"])
 def dates():
     if session["user"] == "developer":
-        if request.method == "POST":
+        if request.method == "POST":    # If "POST", return to the homepage and update the terms
             term1 = request.form["term1"]
             term2 = request.form["term2"]
             term3 = request.form["term3"]
 
             return render_template("index.html", people=people)
-        else:
+        else:   # If "GET", show `dates.html`
             return render_template("dates.html")
     else:
         return render_template("index.html", error="Oh Pepa!!\nNo la líes")
