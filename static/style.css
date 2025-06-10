@@ -167,8 +167,6 @@ button[type="submit"]:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgba(32, 88, 216, 0.58);
-    /*background-color: white;*/
     padding: 80px 20px;
     height: 40px;
 }
