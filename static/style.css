@@ -208,13 +208,13 @@ button[type="submit"]:hover {
     display: inline-block;
     padding: 10px 20px;
     margin: 5px;
-    background: lightgray;
+    background: rgba(0, 78, 191, 0.87);
     border-radius: 5px;
     cursor: pointer;
 }
 
 .term-selector input[type="radio"]:checked + label {
-    background: dodgerblue;
+    background: rgba(223, 130, 3, 0.66);
     color: white;
     font-weight: bold;
 }
@@ -227,13 +227,13 @@ button[type="submit"]:hover {
     display: inline-block;
     padding: 10px 15px;
     margin: 5px;
-    background: lightgray;
+    background: rgba(0, 78, 191, 0.87);
     border-radius: 5px;
     cursor: pointer;
 }
 
 .ronda-selector input[type="radiuo"]:checked + label {
-    background: mediumseagreen;
+    background: rgba(223, 130, 3, 0.66);
     color: white;
     font-weight: bold;
 }
