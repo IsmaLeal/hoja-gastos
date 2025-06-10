@@ -231,7 +231,9 @@ def tesoreria():
         conn.close()
 
         if not result:
-            return render_template("tesoreria.html", people=people, term=term, selected_name=selected_name, error="No term dates for that year.")
+            return render_template("tesoreria.html", people=people,
+                                   term=term, selected_name=selected_name, selected_ronda=ronda,
+                                   error="No term dates for that year.")
 
         term1, term2, term3 = result
         term_starts = {
@@ -264,7 +266,7 @@ def tesoreria():
         total = sum(entry[2] for entry in entries if entry[2] is not None)
 
         return render_template("tesoreria.html", people=people, entries=entries, selected_name=selected_name,
-                               total=total, accounts_used=accounts_used, term=term)
+                               total=total, accounts_used=accounts_used, term=term, selected_ronda=ronda)
 
     return render_template("tesoreria.html", people=people)
 
