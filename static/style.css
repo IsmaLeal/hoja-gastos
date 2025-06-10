@@ -16,6 +16,11 @@ h1 {
     color: #000000;
 }
 
+h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
 .centerimage {
     display: block;
     height: 15rem;
