@@ -197,3 +197,43 @@ button[type="submit"]:hover {
     font-size: 26px;
     cursor: pointer;
 }
+
+/* Tesoreria */
+
+.term-selector input[type="radio"] {
+            display: none;
+        }
+
+.term-selector label {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    background: lightgray;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.term-selector input[type="radio"]:checked + label {
+    background: dodgerblue;
+    color: white;
+    font-weight: bold;
+}
+
+.ronda-selector input[type="radio"] {
+    display: none;
+}
+
+.ronda-selector label {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 5px;
+    background: lightgray;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ronda-selector input[type="radiuo"]:checked + label {
+    background: mediumseagreen;
+    color: white;
+    font-weight: bold;
+}

@@ -35,25 +35,35 @@
         </select>
 
         <label for="ronda">Ronda:</label>
-        <select name="ronda" id="ronda"></select>
+        <select class="ronda-selector" id="ronda"></select>
         <script>
             const selectedRonda = "{{ selected_ronda | default('') }}";
-            const select = document.getElementById("ronda");
+            const container = document.getElementById("ronda");
             const currentYear = new Date().getFullYear();
-            const startYear = 22;
+            const startYear = 23;
             const currentYearShort = currentYear % 100;
 
             for (let y = startYear; y <= currentYearShort; y++) {
                 let next = (y + 1) % 100;
-                let label = `Ronda ${y}/${next < 10 ? '0' + next : next}`;
-                let option = document.createElement('option');
-                option.value = label;
-                option.text = label;
+                let labelText = `Ronda ${y}/${next < 10 ? '0' + next : next}`;
+                let inputId = `ronda_${y}`;
 
-                if (label === selectedRonda || (selectedRonda === "" && y === currentYearShort)) {
-                    option.selected = true;
+                let input = document.createElement('input');
+                input.type = "radio";
+                input.id = inputId;
+                input.name = "ronda";
+                input.value = labelText;
+
+                if (labelText === selectedRonda || (selectedRonda === "" && y === currentYearShort)) {
+                    input.checked = true;
                 }
-                select.appendChild(option);
+
+                let label = document.createElement("label");
+                label.htmlFor = inputId;
+                label.innerText = labelText;
+
+                container.appendChild(input);
+                container.appendChild(label);
             }
         </script>
 
@@ -63,26 +73,6 @@
 <!--            <option value="term2" {% if term == "term2" %}selected{% endif %}>Segundo trimestre</option>-->
 <!--            <option value="term3" {% if term == "term3" %}selected{% endif %}>Tercer trimestre</option>-->
 <!--        </select>-->
-        <style>
-            .term-selector input[type="radio"] {
-                display: none;
-            }
-
-            .term-selector label {
-                display: inline-block;
-                padding: 10px 20px;
-                margin: 5px;
-                background: lightgray;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-
-            .term-selector input[type="radio"]:checked + label {
-                background: dodgerblue;
-                color: white;
-                font-weight: bold;
-            }
-        </style>
 
         <div class="term-selector">
             <input type="radio" id="term1" name="term" value="term1" {% if term == "term1" %}checked{% endif %}>
