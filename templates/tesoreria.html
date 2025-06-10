@@ -102,5 +102,11 @@
             <h3>Total: {{ total }} € (varias cuentas bancarias utilizadas).</h3>
         {% endif %}
     {% endif %}
+
+    {% if total == 0 %}
+    <h1>
+        No hay gastos de este jambo/jamba en estas fechas loco prueba otras o supéralo ya.
+    </h1>
+    {% endif %}
 </body>
 </html>
