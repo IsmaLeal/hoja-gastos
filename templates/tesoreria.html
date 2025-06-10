@@ -37,20 +37,20 @@
         <label for="ronda">Ronda:</label>
         <select name="ronda" id="ronda"></select>
         <script>
-            const selectedRonda = "{{ ronda | default('') }}";
+            const selectedRonda = "{{ selected_ronda | default('') }}";
             const select = document.getElementById("ronda");
             const currentYear = new Date().getFullYear();
             const startYear = 22;
             const currentYearShort = currentYear % 100;
 
-            for(let y = startYear; y <= currentYearShort; y++) {
+            for (let y = startYear; y <= currentYearShort; y++) {
                 let next = (y + 1) % 100;
                 let label = `Ronda ${y}/${next < 10 ? '0' + next : next}`;
                 let option = document.createElement('option');
                 option.value = label;
                 option.text = label;
 
-                if (label === selected_ronda || (selectedRonda === "" && y === currentYearShort)) {
+                if (label === selectedRonda || (selectedRonda === "" && y === currentYearShort)) {
                     option.selected = true;
                 }
                 select.appendChild(option);
