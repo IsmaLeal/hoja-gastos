@@ -185,7 +185,7 @@ def dates():
         else:   # If "GET", show `dates.html`
             return render_template("dates.html")
     else:
-        return render_template("index.html", error="Oh Pepa!!\nNo la líes")
+        return render_template("index.html", error="Oh Pepa!!\nNo la líes", people=people)
 
 
 
