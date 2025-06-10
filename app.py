@@ -231,7 +231,7 @@ def tesoreria():
         conn.close()
 
         if not result:
-            return render_template("tesoreria.html", people=people, error="No term dates for that year.")
+            return render_template("tesoreria.html", people=people, term=term, selected_name=selected_name, error="No term dates for that year.")
 
         term1, term2, term3 = result
         term_starts = {
