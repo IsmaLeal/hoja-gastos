@@ -135,9 +135,9 @@ def submit():
 @app.route("/dates", methods=["GET", "POST"])
 def dates():
     if session["user"] == "developer":
-        term1 = request.form["Primer trimestre"]
-        term2 = request.form["Segundo trimestre"]
-        term3 = request.form["Tercer trimestre"]
+        term1 = request.form["term1"]
+        term2 = request.form["term2"]
+        term3 = request.form["term3"]
     else:
         return render_template("index.html", error="Oh Pepa!!\nNo la líes")
 
