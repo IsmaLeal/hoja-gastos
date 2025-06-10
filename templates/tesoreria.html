@@ -57,12 +57,43 @@
             }
         </script>
 
-        <label for="term">Trimestre:</label>
-        <select name="term" id="term">
-            <option value="term1" {% if term == "term1" %}selected{% endif %}>Primer trimestre</option>
-            <option value="term2" {% if term == "term2" %}selected{% endif %}>Segundo trimestre</option>
-            <option value="term3" {% if term == "term3" %}selected{% endif %}>Tercer trimestre</option>
-        </select>
+<!--        <label for="term">Trimestre:</label>-->
+<!--        <select name="term" id="term">-->
+<!--            <option value="term1" {% if term == "term1" %}selected{% endif %}>Primer trimestre</option>-->
+<!--            <option value="term2" {% if term == "term2" %}selected{% endif %}>Segundo trimestre</option>-->
+<!--            <option value="term3" {% if term == "term3" %}selected{% endif %}>Tercer trimestre</option>-->
+<!--        </select>-->
+        <style>
+            .term-selector input[type="radio"] {
+                display: none;
+            }
+
+            .term-selector label {
+                display: inline-block;
+                padding: 10px 20px;
+                margin: 5px;
+                background: lightgray;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .term-selector input[type="radio"]:checked + label {
+                background: dodgerblue;
+                color: white;
+                font-weight: bold;
+            }
+        </style>
+
+        <div class="term-selector">
+            <input type="radio" id="term1" name="term" value="term1" {% if term == "term1" %}checked{% endif %}>
+            <label for="term1">Primer trimestre</label>
+
+            <input type="radio" id="term2" name="term" value="term2" {% if term == "term2" %}checked{% endif %}>
+            <label for="term2">Segundo trimestre</label>
+
+            <input type="radio" id="term3" name="term" value="term3" {% if term == "term3" %}checked{% endif %}>
+            <label for="term3">Tercer trimestre</label>
+        </div>
         <button type="submit">Ver gastos</button>
     </form>
 
