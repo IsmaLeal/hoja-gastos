@@ -100,6 +100,22 @@ button[type="submit"]:hover {
     transform: scale(1.03);
 }
 
+.dummybutton {
+    background-color: #243d85;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 2.5rem;
+    cursor: pointer;
+    align-self: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dummybutton:hover {
+    background-color: #051850;
+    transform: scale(1.03);
+}
+
 .deletebutton {
     background-color: #a11010;
     color: white;
