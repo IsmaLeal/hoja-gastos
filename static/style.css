@@ -48,6 +48,19 @@ form {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+form label {
+    text-align: center;
+    font-weight: bold;
+}
+
+form select,
+form input[type="radio"],
+form button {
+    margin: 0.3rem;
 }
 
 .form-group {
