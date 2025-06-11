@@ -18,7 +18,7 @@ h1 {
 
 h2 {
     text-align: center;
-    background-color: rgba(243, 141, 2, 0.8);
+    background-color: #f4a961;
     padding: 2rem;
     border-radius: 15rem;
     max-width: 800px;
@@ -35,7 +35,7 @@ h2 {
 }
 
 .container {
-    background-color: rgba(243, 141, 2, 0.8);
+    background-color: #f4a961;
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
