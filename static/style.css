@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: rgba(0, 78, 191, 0.87);
+    background-color: #3b62f6;
     /*background-color: white;*/
     padding: 2rem;
 }
@@ -30,9 +30,9 @@ h2 {
     display: block;
     height: 15rem;
     width: auto;
-    margin: auto;
-    padding-top: 13px;
-    padding-bottom: 13px;
+    margin: 0 auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .container {
@@ -41,7 +41,7 @@ h2 {
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     max-width: 700px;
-    margin: auto;
+    margin: 40px auto;
 }
 
 form {
@@ -118,6 +118,7 @@ button[type="submit"] {
     color: white;
     border: none;
     border-radius: 6px;
+    font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
     align-self: flex-end;
@@ -130,14 +131,15 @@ button[type="submit"]:hover {
 }
 
 .dummybutton {
+    display: block;
+    margin: 2rem auto;
     background-color: rgba(223, 130, 3, 0.8);
     padding: 1rem 1rem;
     color: white;
     border: none;
-    border-radius: 16px;
-    font-size: 2.5rem;
+    border-radius: 10px;
+    font-size: 2rem;
     cursor: pointer;
-    align-self: center;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -254,7 +256,6 @@ button[type="submit"]:hover {
 }
 
 /* Tesoreria */
-
 .term-selector input[type="radio"] {
             display: none;
         }
