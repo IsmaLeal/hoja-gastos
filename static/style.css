@@ -48,18 +48,24 @@ form {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+}
+
+.form-tes {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
     align-items: center;
     margin-top: 2rem;
 }
 
-form label {
+.form-tes label {
     text-align: center;
     font-weight: bold;
 }
 
-form select,
-form input[type="radio"],
-form button {
+.form-tes select,
+.form-tes input[type="radio"],
+.form-tes button {
     margin: 0.3rem;
 }
 
