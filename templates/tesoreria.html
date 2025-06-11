@@ -99,12 +99,12 @@
     </script>
 
     <button class="dummybutton" onclick="alert('Botón completamente inútil. Como tú.')">
-        Enviar
+        Ver
     </button>
 
     {% if entries %}
-        <h2>Entradas de {{ selected_name }}</h2>
-        <table border="1">
+        <h1>Entradas de {{ selected_name }}</h1>
+        <table border="1" style="margin: 1rem auto;">
             <tr>
                 <th>Fecha</th>
                 <th>Cantidad</th>
@@ -133,16 +133,16 @@
             {% endfor %}
         </table>
         {% if accounts_used|length == 1 %}
-            <h3>Total: {{ total }} € a la cuenta {{accounts_used|list|first }}.</h3>
+            <h3 style="text-align: center;">Total: {{ total }} € a la cuenta {{accounts_used|list|first }}.</h3>
         {% else %}
-            <h3>Total: {{ total }} € (varias cuentas bancarias utilizadas).</h3>
+            <h3 style="text-align: center;">Total: {{ total }} € (varias cuentas bancarias utilizadas).</h3>
         {% endif %}
     {% endif %}
 
     {% if not total or total == 0 %}
-    <h1>
+    <h3 style="text-align: center;">
         No hay gastos de este jambo/jamba en estas fechas loco prueba otras o supéralo ya.
-    </h1>
+    </h3>
     {% endif %}
 </body>
 </html>
