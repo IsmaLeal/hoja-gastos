@@ -55,7 +55,8 @@ form {
     flex-direction: column;
     gap: 1.2rem;
     align-items: center;
-    margin-top: 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
 }
 
 .form-tes label {
