@@ -55,6 +55,10 @@
         <a href="/view">Confirmar últimas entradas</a>
         <a href="/tesoreria">Tesorería</a>
         <a href="/logout" style="color: #cc2626;">Cerrar sesión :(</a>
+        {% if session.get('user_role') == 'developer' %}
+            <a href="/admin/users">Administrar usuarios</a>
+        {% endif %}
+
     </div>
 
     <!-- Hamburger sign at the top to open sidebar -->

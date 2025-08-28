@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request, redirect, session, url_for
-import os
-import re
-import requests
-import psycopg2
+import os, re, requests, psycopg2
 from dotenv import load_dotenv
 from datetime import date, datetime
+from functools import wraps
 
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -12,56 +10,34 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "fallback-dev-secret-key")
 
-# Predefined allowed users
-USERS = {
-        "ivan gonzalez": "ivangsngonzalez669",
-        "gonzalo pousa": "gonzalogsnpousa669",
-        "ismael leal": "ismaelgsnleal669",
-        "maria bravo": "mariagsnbravo669",
-        "nuria gomez": "nuriagsngomez669",
-        "lola damgaard": "lolagsndamgaard669",
-        "cyntia fritz": "cyntiagsnfritz669",
-        "sebastian gonzalez": "sebastiangsngonzalez669",
-        "sara jimenez": "saragsnjimenez669",
-        "irune de miguel": "irunegsndemiguel669",
-        "pablo cabarcos": "pablogsncabarcos669",
-        "eva gomez": "evagsngomez669",
-        "miguel ruiz": "miguelgsnruiz669",
-        "ruben garcia": "rubengsngarcia669",
-        "ivan martin": "ivangsnmartin669",
-        "laura diaz": "lauragsndiaz669",
-        "alem": "alemgsn669",
-        "luna miralles": "lunagsnmiralles669",
-        "lucia alarcon": "luciagsnalarcon669",
-        "gonzalo lara": "gonzalogsnlara669",
-        "nora manzano": "noragsnmanzano669",
-        "developer": "developer669"
-    }
+# ---------- DB helpers ----------
+def db_conn():
+    return psycopg2.connect(DATABASE_URL)
 
-people = {
-        "ivan gonzalez": "ES7114650100982050375582",
-        "gonzalo pousa": "ES0921002904030262057029",
-        "ismael leal": "ES6101821294110204237477",
-        "maria bravo": "ES9630580990292762776683",
-        "nuria gomez": "ES5621003414171300376682",
-        "lola damgaard": "ES6701822566150201590657",
-        "cyntia fritz": "ES0721001176131300462209",
-        "sebastian gonzalez": "ES2721003322621300316258",
-        "sara jimenez": "",
-        "irune de miguel": "ES5221004587130200293195",
-        "pablo cabarcos": "",
-        "eva gomez": "ES4521002339310200362644",
-        "miguel ruiz": "ES9630580990292762776683",
-        "ruben garcia": "ES6700814197310001646570",
-        "ivan martin": "ES7314650170191752597751",
-        "laura diaz": "ES0514650170141761503626",
-        "alem": "",
-        "luna miralles": "ES1715632626393265677051",
-        "lucia alarcon": "ES3901824030810201646259",
-        "gonzalo lara": "ES2200730100520742787943",
-        "nora manzano": "",
-    }
+def get_people_dict():
+    """Return {name: iban} for all users (used by your form)."""
+    with db_conn() as conn:
+        with conn.cursor() as c:
+            c.execute("SELECT name, COALESCE(iban,'') FROM users ORDER BY lower(name)")
+            rows = c.fetchall()
+    return {name: iban for (name, iban) in rows}
 
+def get_user_by_name(name):
+    with db_conn() as conn:
+        with conn.cursor() as c:
+            c.execute("SELECT id, name, password, role, iban FROM users WHERE lower(name)=lower(%s)", (name,))
+            return c.fetchone()  # tuple or None
+
+def is_developer():
+    return session.get("user_role") == "developer"
+
+def dev_required(view):
+    @wraps(view)
+    def wrapper(*args, **kwargs):
+        if not is_developer():
+            return render_template("index.html", error="Oh Pepa!!\nNo la líes", people=get_people_dict())
+        return view(*args, **kwargs)
+    return wrapper
 
 def save_term_dates(term1, term2, term3, year):
     conn = psycopg2.connect(DATABASE_URL)
@@ -118,16 +94,21 @@ def upload_image_to_imgur(image_file):
 @app.route("/")
 def home():
     print(f"Connected to: {DATABASE_URL}")
-    return render_template("index.html", people=people)
+    return render_template("index.html", people=get_people_dict())
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":            # After submitting the login
         username = request.form["username"] # Check username and password agree
         password = request.form["password"]
-        if username in USERS and USERS[username] == password:
-            session["user"] = username      # Store username in `session` and redirect
-            return redirect(url_for("home"))
+
+        row = get_user_by_name(username)
+        if row:
+            _id, name, stored_pw, role, _iban = row
+            if password == stored_pw:
+                session["user"] = name      # Store username in `session` and redirect
+                session["user_role"] = role
+                return redirect(url_for("home"))
         else:
             return render_template("login.html", error="Oh Pepa!!\nCredenciales incorrectos")
     return render_template("login.html")
@@ -135,6 +116,7 @@ def login():
 @app.route("/logout")
 def logout():
     session.pop("user", None)
+    session.pop("user_role", None)
     return redirect("/login")
 
 @app.before_request
@@ -169,7 +151,7 @@ def submit():
     conn.commit()
     conn.close()
 
-    return render_template("index.html", message="Submission saved succesfully!", people=people)
+    return render_template("index.html", message="Submission saved succesfully!", people=get_people_dict())
 
 @app.route("/dates", methods=["GET", "POST"])
 def dates():
@@ -181,11 +163,11 @@ def dates():
 
             save_term_dates(term1, term2, term3, datetime.strptime(term1, "%Y-%m-%d").date().year)
 
-            return render_template("index.html", people=people)
+            return render_template("index.html", people=get_people_dict())
         else:   # If "GET", show `dates.html`
             return render_template("dates.html")
     else:
-        return render_template("index.html", error="Oh Pepa!!\nNo la líes", people=people)
+        return render_template("index.html", error="Oh Pepa!!\nNo la líes", people=get_people_dict())
 
 
 
@@ -231,7 +213,7 @@ def tesoreria():
         conn.close()
 
         if not result:
-            return render_template("tesoreria.html", people=people,
+            return render_template("tesoreria.html", people=get_people_dict(),
                                    term=term, selected_name=selected_name, selected_ronda=ronda,
                                    error="No term dates for that year.")
 
@@ -248,7 +230,7 @@ def tesoreria():
             next_index = term_order.index(term) + 1
             end_date = term_starts[term_order[next_index]] if next_index < len(term_order) else date(year + 1, 9, 1)
         except Exception as e:
-            return render_template("tesoreria.html", people=people, error=e)
+            return render_template("tesoreria.html", people=get_people_dict(), error=e)
 
         conn = psycopg2.connect(DATABASE_URL)
         c = conn.cursor()
@@ -265,10 +247,10 @@ def tesoreria():
         accounts_used = set(entry[1] for entry in entries)
         total = sum(entry[2] for entry in entries if entry[2] is not None)
 
-        return render_template("tesoreria.html", people=people, entries=entries, selected_name=selected_name,
+        return render_template("tesoreria.html", people=get_people_dict(), entries=entries, selected_name=selected_name,
                                total=total, accounts_used=accounts_used, term=term, selected_ronda=ronda)
 
-    return render_template("tesoreria.html", people=people)
+    return render_template("tesoreria.html", people=get_people_dict())
 
 
 @app.route("/delete", methods=["POST"])
@@ -280,6 +262,77 @@ def delete_entry():
     conn.commit()
     conn.close()
     return redirect("/view")
+
+
+@app.route("/admin/users", methods=["GET", "POST"])
+@dev_required
+def admin_users():
+    message = None
+    error = None
+
+    if request.method == "POST":
+        action = request.form.get("action")
+        try:
+            if action == "create":
+                name = request.form["name"].strip()
+                password = request.form["password"].strip()
+                role = request.form.get("role", "user").strip() or "user"
+                iban = request.form.get("iban", "").strip()
+
+                # Basic IBAN hygiene (very light; we can harden later)
+                if iban and not re.fullmatch(r"[A-Z]{2}\d{2}[A-Z0-9]{,30}", iban.replace(" ", "").upper()):
+                    raise ValueError("IBAN con formato no válido.")
+
+                with db_conn() as conn:
+                    with conn.cursor() as c:
+                        c.execute("""
+                            INSERT INTO users (name, password, role, iban)
+                            VALUES (%s, %s, %s, %s)
+                        """, (name, password, role, iban))
+                message = f"Usuario «{name}» creado."
+
+            elif action == "update":
+                uid = int(request.form["id"])
+                name = request.form["name"].strip()
+                password = request.form.get("password", "").strip()
+                role = request.form.get("role", "user").strip() or "user"
+                iban = request.form.get("iban", "").strip()
+
+                if iban and not re.fullmatch(r"[A-Z]{2}\d{2}[A-Z0-9]{,30}", iban.replace(" ", "").upper()):
+                    raise ValueError("IBAN con formato no válido.")
+
+                with db_conn() as conn:
+                    with conn.cursor() as c:
+                        if password:
+                            c.execute("""
+                                UPDATE users SET name=%s, password=%s, role=%s, iban=%s
+                                WHERE id=%s
+                            """, (name, password, role, iban, uid))
+                        else:
+                            c.execute("""
+                                UPDATE users SET name=%s, role=%s, iban=%s
+                                WHERE id=%s
+                            """, (name, role, iban, uid))
+                message = f"Usuario «{name}» actualizado."
+
+            elif action == "delete":
+                uid = int(request.form["id"])
+                with db_conn() as conn:
+                    with conn.cursor() as c:
+                        c.execute("DELETE FROM users WHERE id=%s", (uid,))
+                message = "Usuario eliminado."
+
+        except Exception as e:
+            error = str(e)
+
+    # Load list for display
+    with db_conn() as conn:
+        with conn.cursor() as c:
+            c.execute("SELECT id, name, role, COALESCE(iban,'') FROM users ORDER BY lower(name)")
+            users = c.fetchall()
+
+    return render_template("admin_users.html",
+                           users=users, message=message, error=error, people=get_people_dict())
 
 
 if __name__ == "__main__":

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin — Usuarios</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left"><a href="/" class="nav-link">← Volver</a></div>
+  <div class="topbar-center"><h1>Administrar usuarios</h1></div>
+  <div class="topbar-right"><a href="/logout" class="nav-link" style="color:#cc2626;">Cerrar sesión</a></div>
+</div>
+
+<div class="container">
+
+  {% if message %}
+    <p style="color:#4cde4c;">{{ message }}</p>
+  {% endif %}
+  {% if error %}
+    <p style="color:black; background-color:yellow; text-align:center;">{{ error }}</p>
+  {% endif %}
+
+  <h2>Listado</h2>
+  <table>
+    <thead><tr><th>Nombre</th><th>Rol</th><th>IBAN</th><th>Acciones</th></tr></thead>
+    <tbody>
+      {% for uid, name, role, iban in users %}
+      <tr>
+        <td>{{ name }}</td>
+        <td>{{ role }}</td>
+        <td><code>{{ iban }}</code></td>
+        <td style="display:flex; gap:.5rem;">
+          <!-- Update form -->
+          <form action="/admin/users" method="POST" style="display:inline;">
+            <input type="hidden" name="action" value="update">
+            <input type="hidden" name="id" value="{{ uid }}">
+            <input type="text" name="name" value="{{ name }}" required>
+            <input type="text" name="iban" value="{{ iban }}" placeholder="IBAN">
+            <select name="role">
+              <option value="user" {% if role=='user' %}selected{% endif %}>user</option>
+              <option value="developer" {% if role=='developer' %}selected{% endif %}>developer</option>
+            </select>
+            <input type="password" name="password" placeholder="(opcional) Nueva contraseña">
+            <button type="submit">Guardar</button>
+          </form>
+
+          <!-- Delete form -->
+          <form action="/admin/users" method="POST" onsubmit="return confirm('¿Eliminar usuario?');" style="display:inline;">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="id" value="{{ uid }}">
+            <button type="submit" style="background:#cc2626;color:white;">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2>Crear nuevo</h2>
+  <form action="/admin/users" method="POST">
+    <input type="hidden" name="action" value="create">
+    <label>Nombre <input type="text" name="name" required></label>
+    <label>Contraseña <input type="password" name="password" required></label>
+    <label>Rol
+      <select name="role">
+        <option value="user">user</option>
+        <option value="developer">developer</option>
+      </select>
+    </label>
+    <label>IBAN <input type="text" name="iban" placeholder="ES.."></label>
+    <button type="submit">Crear</button>
+  </form>
+
+</div>
+</body>
+</html>
