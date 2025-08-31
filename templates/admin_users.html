@@ -34,25 +34,27 @@
         <td><code>{{ iban }}</code></td>
         <td style="display:flex; gap:.5rem;">
           <!-- Update form -->
-          <form action="/admin/users" method="POST" style="display:inline;">
-            <input type="hidden" name="action" value="update">
-            <input type="hidden" name="id" value="{{ uid }}">
-            <input type="text" name="name" value="{{ name }}" required>
-            <input type="text" name="iban" value="{{ iban }}" placeholder="IBAN">
-            <select name="role">
-              <option value="user" {% if role=='user' %}selected{% endif %}>user</option>
-              <option value="developer" {% if role=='developer' %}selected{% endif %}>developer</option>
-            </select>
-            <input type="password" name="password" placeholder="(opcional) Nueva contraseña">
-            <button type="submit">Guardar</button>
-          </form>
+          <div class="user-row">
+            <form action="/admin/users" method="POST" style="display:inline;">
+              <input type="hidden" name="action" value="update">
+              <input type="hidden" name="id" value="{{ uid }}">
+              <input type="text" name="name" value="{{ name }}" required>
+              <input type="text" name="iban" value="{{ iban }}" placeholder="IBAN">
+              <select name="role">
+                <option value="user" {% if role=='user' %}selected{% endif %}>user</option>
+                <option value="developer" {% if role=='developer' %}selected{% endif %}>developer</option>
+              </select>
+              <input type="password" name="password" placeholder="(opcional) Nueva contraseña">
+              <button type="submit">Guardar</button>
+            </form>
 
-          <!-- Delete form -->
-          <form action="/admin/users" method="POST" onsubmit="return confirm('¿Eliminar usuario?');" style="display:inline;">
-            <input type="hidden" name="action" value="delete">
-            <input type="hidden" name="id" value="{{ uid }}">
-            <button type="submit" style="background:#cc2626;color:white;">Eliminar</button>
-          </form>
+            <!-- Delete form -->
+            <form action="/admin/users" method="POST" onsubmit="return confirm('¿Eliminar usuario?');" style="display:inline;">
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="id" value="{{ uid }}">
+              <button type="submit" style="background:#cc2626;color:white;">Eliminar</button>
+            </form>
+          </div>
         </td>
       </tr>
       {% endfor %}

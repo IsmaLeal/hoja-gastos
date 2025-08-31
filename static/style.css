@@ -313,3 +313,9 @@ button[type="submit"]:hover {
     color: white;
     font-weight: bold;
 }
+
+.user-row {
+    margin-bottom: 2rem;   /* spacing between users */
+    padding-bottom: 1rem;  /* space inside the row */
+    border-bottom: 1px solid #ccc;  /* subtle separator line */
+}
