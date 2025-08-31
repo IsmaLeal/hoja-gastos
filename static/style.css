@@ -341,13 +341,19 @@ button[type="submit"]:hover {
 /* Compact, readable admin users table */
 .users-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;          /* so the row separators look clean */
 }
+
+.users-table th:nth-child(1) { width: 18ch; }  /* Nombre */
+.users-table th:nth-child(2) { width: 10ch; }  /* Rol    */
+.users-table th:nth-child(3) { width: 36ch; }  /* IBAN   */
+.users-table th:nth-child(4) { width: auto; }  /* Acciones */
 
 .users-table th,
 .users-table td {
   padding: 0.5rem 0.8rem;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .users-table tbody tr {
@@ -360,10 +366,10 @@ button[type="submit"]:hover {
 
 /* Actions cell: keep things on one row, wrap if narrow */
 .actions {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 0.75rem;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
 }
 
 /* Forms inside the actions cell behave like chunks that can wrap */
@@ -378,8 +384,8 @@ button[type="submit"]:hover {
 .actions input[type="text"],
 .actions input[type="password"],
 .actions select {
-  min-width: 1rem;
-  max-width: 16rem;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 0.35rem 0.5rem;
 }
 actions form { margin: 0; }
@@ -393,11 +399,15 @@ actions form { margin: 0; }
 .update-form {
   display: grid;
   grid-auto-flow: column;             /* place items left→right */
-  grid-template-columns: 10rem 14rem 8rem 16rem auto;
-  /*            name   IBAN    role  new-pass  Guardar */
+  grid-template-columns:
+    minmax(9rem, 1fr)   /* name  */
+    minmax(14rem, 1.6fr)/* IBAN  */
+    minmax(7rem, auto)  /* role  */
+    minmax(12rem, 1.4fr)/* new pw*/
+    auto;               /* Guardar */
   align-items: center;
   column-gap: 0.5rem;
-  row-gap: 0;                          /* keep it to one line on wide screens */
+  min-width: 0;                          /* keep it to one line on wide screens */
 }
 
 /* Buttons */
@@ -411,12 +421,25 @@ actions form { margin: 0; }
 .btn.primary { background: #27428b; color: #fff; }
 .btn.danger  { background: #cc2626; color: #fff; }
 
-/* Reduce unused vertical space on very wide screens */
-@media (max-width: 900px) {
-  .actions { flex-wrap: wrap; }        /* allow wrapping below delete button */
+/* Tablets: two lines inside the update form */
+@media (max-width: 980px) {
   .update-form {
     grid-auto-flow: row;
-    grid-template-columns: 1fr 1fr;    /* two columns on narrow screens */
-    row-gap: 0.5rem;
+    grid-template-columns: 1fr 1fr;   /* two columns */
+    row-gap: .5rem;
+  }
+  .actions {
+    grid-template-columns: 1fr;       /* delete drops below on a new line */
+    justify-items: start;
+  }
+}
+
+/* Phones: single column, full-width controls */
+@media (max-width: 640px) {
+  .update-form {
+    grid-template-columns: 1fr;       /* stack all inputs & the Save button */
+  }
+  .actions form, .actions .btn {
+    width: 100%;
   }
 }
