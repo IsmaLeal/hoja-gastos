@@ -346,8 +346,8 @@ button[type="submit"]:hover {
 
 .users-table th,
 .users-table td {
-  padding: 0.6rem 0.8rem;
-  vertical-align: middle;
+  padding: 0.5rem 0.8rem;
+  vertical-align: top;
 }
 
 .users-table tbody tr {
@@ -361,9 +361,9 @@ button[type="submit"]:hover {
 /* Actions cell: keep things on one row, wrap if narrow */
 .actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.6rem;   /* row gap / column gap */
-  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+  align-items: flex-start;
 }
 
 /* Forms inside the actions cell behave like chunks that can wrap */
@@ -378,14 +378,31 @@ button[type="submit"]:hover {
 .actions input[type="text"],
 .actions input[type="password"],
 .actions select {
-  min-width: 9rem;
+  min-width: 1rem;
   max-width: 16rem;
-  padding: 0.45rem 0.55rem;
+  padding: 0.35rem 0.5rem;
+}
+actions form { margin: 0; }
+.actions input,
+.actions select,
+.actions button {
+  margin: 0;                 /* override any global margins */
+  display: inline-flex;      /* no block-height stacking */
+}
+
+.update-form {
+  display: grid;
+  grid-auto-flow: column;             /* place items left→right */
+  grid-template-columns: 10rem 14rem 8rem 16rem auto;
+  /*            name   IBAN    role  new-pass  Guardar */
+  align-items: center;
+  column-gap: 0.5rem;
+  row-gap: 0;                          /* keep it to one line on wide screens */
 }
 
 /* Buttons */
 .btn {
-  padding: 0.5rem 0.9rem;
+  padding: 0.45rem 0.8rem;
   border: none;
   border-radius: 0.4rem;
   cursor: pointer;
@@ -395,6 +412,11 @@ button[type="submit"]:hover {
 .btn.danger  { background: #cc2626; color: #fff; }
 
 /* Reduce unused vertical space on very wide screens */
-@media (min-width: 1200px) {
-  .users-table th, .users-table td { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+@media (max-width: 900px) {
+  .actions { flex-wrap: wrap; }        /* allow wrapping below delete button */
+  .update-form {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr;    /* two columns on narrow screens */
+    row-gap: 0.5rem;
+  }
 }
