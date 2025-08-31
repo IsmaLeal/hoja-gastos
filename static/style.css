@@ -314,8 +314,87 @@ button[type="submit"]:hover {
     font-weight: bold;
 }
 
-.user-row {
-    margin-bottom: 2rem;   /* spacing between users */
-    padding-bottom: 1rem;  /* space inside the row */
-    border-bottom: 1px solid #ccc;  /* subtle separator line */
+/*.user-row {
+    display: flex;
+    align-items: center;   *//* vertically center items *//*
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ccc;
+    gap: 1rem;  *//* space between columns *//*
+}
+
+.user-row:last-child {
+    border-bottom: none;  *//* no line after the last user *//*
+}
+
+.user-info {
+    flex: 2;
+}
+
+.user-actions {
+    flex: 3;
+    display: flex;
+    flex-wrap: wrap;  *//* allow buttons/inputs to wrap if narrow *//*
+    gap: 0.5rem;
+}*/
+
+/* Compact, readable admin users table */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;          /* so the row separators look clean */
+}
+
+.users-table th,
+.users-table td {
+  padding: 0.6rem 0.8rem;
+  vertical-align: middle;
+}
+
+.users-table tbody tr {
+  border-bottom: 1px solid rgba(0,0,0,0.15);  /* separator between users */
+}
+
+.users-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* Actions cell: keep things on one row, wrap if narrow */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.6rem;   /* row gap / column gap */
+  align-items: center;
+}
+
+/* Forms inside the actions cell behave like chunks that can wrap */
+.action-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Make inputs compact so the row doesn't grow too tall */
+.actions input[type="text"],
+.actions input[type="password"],
+.actions select {
+  min-width: 9rem;
+  max-width: 16rem;
+  padding: 0.45rem 0.55rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.5rem 0.9rem;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.btn.primary { background: #27428b; color: #fff; }
+.btn.danger  { background: #cc2626; color: #fff; }
+
+/* Reduce unused vertical space on very wide screens */
+@media (min-width: 1200px) {
+  .users-table th, .users-table td { padding-top: 0.5rem; padding-bottom: 0.5rem; }
 }
