@@ -25,20 +25,22 @@
         <span class="hamburger" onclick="toggleSidebar()">☰</span>
     </div>
     <h1>Entradas registradas</h1>
-    <ul>
+    <ul class="entries">
         {% for entry in entries %}
-            <li>
-                <strong>{{ entry[0] }}</strong> gastó <strong>{{ entry[2] }}</strong>€ en "{{ entry[1] }}" para {{ entry[4] }} el {{ entry[5] }}.
-                {% if entry[6] %}
-                    <a href="{{ entry[6] }}" target="_blank">Ver imagen</a><br>
-                    <img src="{{ entry[6] }}" style="max-height:100px;">
-                {% endif %}
-                <form action="/delete" method="POST" style="display:inline;">
-                    <input type="hidden" name="entry_id" value="{{ entry[7] }}">
-                    <button class="deletebutton" onclick="return confirm('¿Estás seguro/a/x de que quieres borrar esta entrada?')">🗑
-                        Borrar esta entrada (NO LE DES SIN QUERER)
-                    </button>
-                </form>
+            <li class="entry">
+                <div class="thumb">
+                    <strong>{{ entry[0] }}</strong> gastó <strong>{{ entry[2] }}</strong>€ en "{{ entry[1] }}" para {{ entry[4] }} el {{ entry[5] }}.
+                    {% if entry[6] %}
+                        <a href="{{ entry[6] }}" target="_blank">Ver imagen</a><br>
+                        <img src="{{ entry[6] }}" style="max-height:100px;">
+                    {% endif %}
+                    <form action="/delete" method="POST" style="display:inline;">
+                        <input type="hidden" name="entry_id" value="{{ entry[7] }}">
+                        <button class="deletebutton" onclick="return confirm('¿Estás seguro/a/x de que quieres borrar esta entrada?')">🗑
+                            Borrar esta entrada (NO LE DES SIN QUERER)
+                        </button>
+                    </form>
+                </div>
             </li>
         {% endfor %}
     </ul>
