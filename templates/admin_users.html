@@ -36,7 +36,7 @@
         {% for uid, name, role, iban in users %}
         <tr>
           <td>{{ name }}</td>
-          <td><code>{{ iban }}</code></td>
+          <td><code>{{ iban | iban_group | safe }}</code></td>
           <td class="actions">
             <!-- Update -->
             <form action="/admin/users" method="POST" class="action-form update-form">

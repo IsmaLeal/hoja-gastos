@@ -39,6 +39,17 @@ def dev_required(view):
         return view(*args, **kwargs)
     return wrapper
 
+def iban_group(value: str) -> str:
+    """
+    Insert a zero-width space every 4 characters
+    so browsers can wrap IBANs neatly.
+    """
+    if not value:
+        return ""
+    return "&#8203;".join(value[i:i+4] for i in range(0, len(value), 4))
+
+app.jinja_env.filters["iban_group"] = iban_group
+
 def save_term_dates(term1, term2, term3, year):
     conn = psycopg2.connect(DATABASE_URL)
     c = conn.cursor()
