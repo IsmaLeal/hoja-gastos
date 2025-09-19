@@ -6,15 +6,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
-        const people = {{ people | tojson }};
+        const people = {{ people | tojson | safe}};
 
         function autofillAccount() {
-            const name = document.getElementById("name").value;         // Get value of name input
+            const name = document.getElementById("name").value.trim();         // Get value of name input
             const accountInput = document.getElementById("account");    // Get account input
             const useCheckbox = document.getElementById("use_auto_account");    // Get checkbox element
 
-            if (people[name]) { // If the name is in the `people` dictionary
-                accountInput.value = people[name];  // Fill account field with its value
+            const iban = people[name] || "";
+
+            if (iban) { // If the name is in the `people` dictionary
+                accountInput.value = iban;  // Fill account field with its value
                 accountInput.readOnly = true;   // Prevent the user from editing
                 useCheckbox.checked = false;     // Check "Use this account" checkbox
                 useCheckbox.style.display = "inline";   // Make checkbox visible
@@ -27,7 +29,7 @@
         }
 
         function toggleAccountEdit() {
-            const name = document.getElementById("name").value;
+            const name = document.getElementById("name").value.trim();
             const accountInput = document.getElementById("account");
             const useCheckbox = document.getElementById("use_auto_account");
             if (useCheckbox.checked) {
@@ -40,7 +42,6 @@
                 accountInput.value = people[name];
               }
             }
-        }
     </script>
     <script>
         function toggleSidebar() {  // When called, changes the sidebar's width to either 0px or 250px
@@ -103,7 +104,7 @@
 
             <div class="form-group">
                 <label for="account">Cuenta Bancaria *</label>
-                <input type="text" id="account" name="account" required/>
+                <input type="text" id="account" name="account" required readonly/>
                 <label>
                     <input type="checkbox" id="use_auto_account" onchange="toggleAccountEdit()" style="display:none;">
                     Usar otra cuenta
