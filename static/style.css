@@ -361,9 +361,10 @@ button[type="submit"]:hover {
 /* Actions cell: keep things on one row, wrap if narrow */
 .actions {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  grid-template-rows: repeat(2, 36px);
-  column-gap: .6rem
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(2, 36px) auto;
+  column-gap: .8rem;
+  row-gap: .6rem;
   align-items: center;
   min-width: 0;
 }
@@ -410,19 +411,17 @@ button[type="submit"]:hover {
 .actions input[name="password"] { grid-column: 2; grid-row: 2; }
 
 .actions .btn.primary {
-  grid-column: 2; grid-row: 2;
+  grid-column: 1; grid-row: 3;
+  justify-self: start;
+}
+
+.actions form:last-child .btn.danger {
+  grid-column: 2; grid-row: 3;
   justify-self: end;
 }
 
-.actions form:last-child {
-  grid-column: 3; grid-row: 1 / span 2;
-  align-self: center;
-}
-
 /* Compact 2×2 grid for the update form (all screens by default) */
-.update-form {
-  display: contents;
-}
+.update-form { display: contents; }
 
 /* compact height for the controls inside the grid */
 .update-form input[type="text"],
