@@ -166,7 +166,7 @@ def submit():
 
 @app.route("/dates", methods=["GET", "POST"])
 def dates():
-    if session["user"] == "developer":
+    if session["user_role"] == "developer":
         if request.method == "POST":    # If "POST", return to the homepage and update the terms
             term1 = request.form["term1"]
             term2 = request.form["term2"]
