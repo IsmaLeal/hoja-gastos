@@ -323,8 +323,8 @@ button[type="submit"]:hover {
   border-collapse: collapse;          /* so the row separators look clean */
 }
 
-.users-table th:nth-child(1) { width: 18ch; }  /* Nombre */
-.users-table th:nth-child(2) { width: 36ch; }  /* IBAN   */
+.users-table th:nth-child(1) { width: clamp(10ch, 24vw, 18ch); }  /* Nombre */
+.users-table th:nth-child(2) { width: clamp(12ch, 40vw, 36ch); }  /* IBAN   */
 .users-table th:nth-child(3) { width: auto; }  /* Acciones */
 
 .users-table th,
@@ -356,8 +356,9 @@ button[type="submit"]:hover {
 
 /* IBAN text (rendered inside <code>) may break, but only at inserted ZWSPs */
 .users-table td code {
-  word-break: break-word;    /* allow breaking */
-  overflow-wrap: anywhere;   /* but only uses ZWSP if present */
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 
