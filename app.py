@@ -198,12 +198,6 @@ def view_entries():
 
 @app.route("/tesoreria", methods=["GET", "POST"])
 def tesoreria():
-    entries = []
-    total = 0
-    selected_name = None
-    term = None
-    year = None
-
     if request.method == "POST":
         selected_name = request.form.get("name")
         term = request.form.get("term")

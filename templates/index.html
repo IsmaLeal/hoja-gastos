@@ -16,7 +16,7 @@
             if (people[name]) { // If the name is in the `people` dictionary
                 accountInput.value = people[name];  // Fill account field with its value
                 accountInput.readOnly = true;   // Prevent the user from editing
-                useCheckbox.checked = true;     // Check "Use this account" checkbox
+                useCheckbox.checked = false;     // Check "Use this account" checkbox
                 useCheckbox.style.display = "inline";   // Make checkbox visible
             } else {    // If the name is not recognised
                 accountInput.value = "";    // Clear account field
@@ -27,9 +27,19 @@
         }
 
         function toggleAccountEdit() {
+            const name = document.getElementById("name").value;
             const accountInput = document.getElementById("account");
             const useCheckbox = document.getElementById("use_auto_account");
-            accountInput.readOnly = useCheckbox.checked;    // Make account field read-only if box is checked
+            if (useCheckbox.checked) {
+                // Box checked → let user edit, empty the field
+                accountInput.readOnly = false;
+                accountInput.value = "";
+              } else {
+                // Box unchecked → readonly, restore saved IBAN
+                accountInput.readOnly = true;
+                accountInput.value = people[name];
+              }
+            }
         }
     </script>
     <script>
@@ -95,8 +105,8 @@
                 <label for="account">Cuenta Bancaria *</label>
                 <input type="text" id="account" name="account" required/>
                 <label>
-                    <input type="checkbox" id="use_auto_account" checked onchange="toggleAccountEdit()" style="display:none;">
-                    Usar mi cuenta
+                    <input type="checkbox" id="use_auto_account" onchange="toggleAccountEdit()" style="display:none;">
+                    Usar otra cuenta
                 </label>
             </div>
 
