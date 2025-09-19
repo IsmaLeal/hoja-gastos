@@ -324,8 +324,8 @@ button[type="submit"]:hover {
 }
 
 .users-table th:nth-child(1) { width: 18ch; }  /* Nombre */
-.users-table th:nth-child(3) { width: 36ch; }  /* IBAN   */
-.users-table th:nth-child(4) { width: auto; }  /* Acciones */
+.users-table th:nth-child(2) { width: 36ch; }  /* IBAN   */
+.users-table th:nth-child(3) { width: auto; }  /* Acciones */
 
 .users-table th,
 .users-table td {
@@ -341,12 +341,25 @@ button[type="submit"]:hover {
   border-bottom: none;
 }
 
-.users-table code,
-.users-table td,
+/* Headers never wrap */
 .users-table th {
-  overflow-wrap: anywhere;   /* allows long tokens (IBAN) to wrap */
-  word-break: break-word;
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
 }
+
+/* Normal cells don't break words by default */
+.users-table td {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+/* IBAN text (rendered inside <code>) may break, but only at inserted ZWSPs */
+.users-table td code {
+  word-break: break-word;    /* allow breaking */
+  overflow-wrap: anywhere;   /* but only uses ZWSP if present */
+}
+
 
 .users-table th,
 .users-table td { text-align: left; }
