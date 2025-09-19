@@ -40,9 +40,9 @@ h2 {
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    max-width: 700px;
+    max-width: 960px;
     margin: 40px auto;
-    overflow-x:hidden;
+    overflow-x: auto;
 }
 
 form {
@@ -365,6 +365,18 @@ button[type="submit"]:hover {
   border-bottom: none;
 }
 
+.users-table code,
+.users-table td,
+.users-table th {
+  overflow-wrap: anywhere;   /* allows long tokens (IBAN) to wrap */
+  word-break: break-word;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Actions cell: keep things on one row, wrap if narrow */
 .actions {
   display: flex;
@@ -390,7 +402,7 @@ button[type="submit"]:hover {
   box-sizing: border-box;
   padding: 0.35rem 0.5rem;
 }
-actions form { margin: 0; }
+.actions form { margin: 0; }
 .actions input,
 .actions select,
 .actions button {

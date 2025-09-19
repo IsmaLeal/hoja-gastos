@@ -22,52 +22,53 @@
   {% if error %}
     <p style="color:black; background-color:yellow; text-align:center;">{{ error }}</p>
   {% endif %}
-
+<div class="table-wrap">
   <h2>Listado</h2>
-  <table class="users-table">
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Rol</th>
-      <th>IBAN</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for uid, name, role, iban in users %}
-    <tr>
-      <td>{{ name }}</td>
-      <td>{{ role }}</td>
-      <td><code>{{ iban }}</code></td>
-      <td class="actions">
-        <!-- Update -->
-        <form action="/admin/users" method="POST" class="action-form update-form">
-          <input type="hidden" name="action" value="update">
-          <input type="hidden" name="id" value="{{ uid }}">
+      <table class="users-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Rol</th>
+          <th>IBAN</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for uid, name, role, iban in users %}
+        <tr>
+          <td>{{ name }}</td>
+          <td>{{ role }}</td>
+          <td><code>{{ iban }}</code></td>
+          <td class="actions">
+            <!-- Update -->
+            <form action="/admin/users" method="POST" class="action-form update-form">
+              <input type="hidden" name="action" value="update">
+              <input type="hidden" name="id" value="{{ uid }}">
 
-          <input type="text" name="name" value="{{ name }}" required placeholder="Nombre">
-          <input type="text" name="iban" value="{{ iban }}" placeholder="IBAN">
-          <select name="role">
-            <option value="user" {% if role=='user' %}selected{% endif %}>user</option>
-            <option value="developer" {% if role=='developer' %}selected{% endif %}>developer</option>
-          </select>
-          <input type="password" name="password" placeholder="(opcional) Nueva contraseña">
+              <input type="text" name="name" value="{{ name }}" required placeholder="Nombre">
+              <input type="text" name="iban" value="{{ iban }}" placeholder="IBAN">
+              <select name="role">
+                <option value="user" {% if role=='user' %}selected{% endif %}>user</option>
+                <option value="developer" {% if role=='developer' %}selected{% endif %}>developer</option>
+              </select>
+              <input type="password" name="password" placeholder="(opcional) Nueva contraseña">
 
-          <button type="submit" class="btn primary">Guardar</button>
-        </form>
+              <button type="submit" class="btn primary">Guardar</button>
+            </form>
 
-        <!-- Delete -->
-        <form action="/admin/users" method="POST" class="action-form"
-              onsubmit="return confirm('¿Eliminar usuario?');">
-          <input type="hidden" name="action" value="delete">
-          <input type="hidden" name="id" value="{{ uid }}">
-          <button type="submit" class="btn danger">Eliminar</button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+            <!-- Delete -->
+            <form action="/admin/users" method="POST" class="action-form"
+                  onsubmit="return confirm('¿Eliminar usuario?');">
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="id" value="{{ uid }}">
+              <button type="submit" class="btn danger">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
 
   <hr>
 
