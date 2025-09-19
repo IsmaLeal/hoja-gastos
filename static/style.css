@@ -501,6 +501,15 @@ button[type="submit"]:hover {
   .update-form .btn,
   .actions form:last-child .btn { width: 100%; }
   .container { padding: 1rem; }
+  .users-table th:nth-child(2) { width: 10ch; }
+
+  .users-table td:nth-child(2) code {
+    display: inline-block;
+    max-width: 4.2ch;        /* 4ch + tiny slack for font metrics */
+    white-space: normal;
+    word-break: break-word;  /* allow breaking at our ZWSPs */
+    overflow-wrap: anywhere;
+  }
 
   h2 {
     padding: .75rem 1rem;
