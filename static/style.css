@@ -192,20 +192,20 @@ button[type="submit"]:hover {
 
 .entry {
   display: grid;
-  grid-template-columns: 96px 1fr auto;
-  align-items: center;
-  gap: 0.8rem 1.2rem;
-  padding: 0.7rem 1rem;
+  grid-template-columns: 80px 1fr auto;
+  gap: 1rem;
+  align-items: start;
+  padding: 1rem;
   background: rgba(255,255,255,0.08);
   border-radius: 10px;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.7rem;
 }
 
 .thumb { width: 96px; }
 .thumb img {
   display: block;
-  height: 80px;
-  width: auto;
+  max-width: 100%;
+  max-height: 80px;
   border-radius: 6px;
   object-fit: cover;
 }
@@ -218,7 +218,7 @@ button[type="submit"]:hover {
 }
 
 /* Text column */
-.info { line-height: 1.35; }
+.info { line-height: 1.35; max-width: 700px; }
 
 /* Actions column */
 .actions { justify-self: end; }

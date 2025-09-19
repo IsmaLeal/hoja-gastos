@@ -28,19 +28,31 @@
     <ul class="entries">
         {% for entry in entries %}
             <li class="entry">
-                <div class="thumb">
-                    <strong>{{ entry[0] }}</strong> gastó <strong>{{ entry[2] }}</strong>€ en "{{ entry[1] }}" para {{ entry[4] }} el {{ entry[5] }}.
-                    {% if entry[6] %}
-                        <a href="{{ entry[6] }}" target="_blank">Ver imagen</a><br>
-                        <img src="{{ entry[6] }}" style="max-height:100px;">
-                    {% endif %}
-                    <form action="/delete" method="POST" style="display:inline;">
-                        <input type="hidden" name="entry_id" value="{{ entry[7] }}">
-                        <button class="deletebutton" onclick="return confirm('¿Estás seguro/a/x de que quieres borrar esta entrada?')">🗑
-                            Borrar esta entrada (NO LE DES SIN QUERER)
-                        </button>
-                    </form>
-                </div>
+                <!-- Thumbnail column -->
+              <div class="thumb">
+                {% if entry[6] %}
+                  <a href="{{ entry[6] }}" target="_blank" aria-label="Ver imagen">
+                    <img src="{{ entry[6] }}" alt="">
+                  </a>
+                {% endif %}
+              </div>
+
+              <!-- Info column -->
+              <div class="info">
+                <strong>{{ entry[0] }}</strong>
+                gastó <strong>{{ entry[2] }}</strong>€ en
+                "{{ entry[1] }}" para {{ entry[4] }} el {{ entry[5] }}.
+                {% if entry[6] %}
+                  <br><a href="{{ entry[6] }}" target="_blank">Ver imagen</a>
+                {% endif %}
+              </div>
+
+              <!-- Actions column -->
+              <form action="/delete" method="POST" class="actions"
+                    onsubmit="return confirm('¿Estás seguro/a/x de que quieres borrar esta entrada?')">
+                <input type="hidden" name="entry_id" value="{{ entry[7] }}">
+                <button class="deletebutton">🗑 Borrar esta entrada</button>
+              </form>
             </li>
         {% endfor %}
     </ul>
