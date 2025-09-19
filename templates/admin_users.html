@@ -28,7 +28,6 @@
       <thead>
         <tr>
           <th>Nombre</th>
-          <th>Rol</th>
           <th>IBAN</th>
           <th>Acciones</th>
         </tr>
@@ -37,7 +36,6 @@
         {% for uid, name, role, iban in users %}
         <tr>
           <td>{{ name }}</td>
-          <td>{{ role }}</td>
           <td><code>{{ iban }}</code></td>
           <td class="actions">
             <!-- Update -->
