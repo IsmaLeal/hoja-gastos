@@ -64,24 +64,48 @@
         user-select: none;
         white-space: pre;                  /* preserve spaces and punctuation */
       }
-      #scramble {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; /* monospace for tidy columns */
-        display: inline-flex;          /* lay slots left-to-right */
-        gap: 0;                        /* no spacing between slots */
-      }
-      .slot {
-        display: inline-block;
-        width: 1ch;                    /* one character width */
-        height: 1em;                   /* show only one row */
-        line-height: 1em;
-        overflow: hidden;              /* hide the rest of the stack */
-        vertical-align: bottom;
-        text-align: left;
-      }
-      .stack {
-        display: block;
-        white-space: pre;              /* keep line breaks in innerHTML */
-        }
+          #splash {
+            position: fixed; inset: 0;
+            background: #ffffff;
+            display: grid; place-items: center;
+          }
+          #scramble {
+            display: inline-flex;            /* slots left→right */
+            gap: 0;
+            font-family: ui-monospace, Menlo, Consolas, monospace;
+            font-size: clamp(24px, 5vw, 56px);
+            line-height: 1em;
+            letter-spacing: .03em;
+            color: #111;
+            white-space: pre;
+            user-select: none;
+          }
+
+          /* One column per character */
+          .slot {
+            position: relative;
+            width: 1ch;
+            height: 8em;                     /* shows the pile above + the final 1em “window” at bottom */
+            overflow: hidden;
+            display: inline-block;
+          }
+
+          /* The visible 1em “window” where the final letter lands is the bottom strip of the slot */
+          .stack {
+            position: absolute;
+            left: 0; right: 0;
+            bottom: 1em;                     /* baseline: final letter sits here after falling */
+            white-space: pre;
+            transform: translateY(0);        /* starts with ‘a’ just above the window */
+          }
+
+          /* Fade out the pile as it goes higher */
+          .slot::before {
+            content: "";
+            position: absolute; inset: 0 0 1em 0;  /* leave the bottom 1em crisp */
+            background: linear-gradient(to top, rgba(255,255,255,0) 60%, rgba(255,255,255,1) 100%);
+            pointer-events: none;
+          }
     </style>
 </head>
 <body>
@@ -218,71 +242,105 @@
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const TEXT = "GSN (Gays Sin Nombre)";
+        const TEXT = "hqt (hola que tal)";
         const ALPHA = "abcdefghijklmnopqrstuvwxyz";
         const isLetter = c => /[a-zA-Z]/.test(c);
 
-        // Build slots so each character stays in its final position
         const scr = document.getElementById("scramble");
-        scr.textContent = "".padEnd(TEXT.length, " ");
+        scr.innerHTML = ""; // rebuild
 
-        // Precompute total steps (letters spin from 'a' to target letter)
-        const stepsPerChar = [...TEXT].map(ch => {
+        // Build slots
+        const slots = [...TEXT].map(ch => {
+          const slot = document.createElement("span");
+          slot.className = "slot";
+
+          if (!isLetter(ch)) {
+            // Non-letters are just placed at the bottom window immediately
+            const fixed = document.createElement("span");
+            fixed.style.position = "absolute";
+            fixed.style.left = "0"; fixed.style.right = "0";
+            fixed.style.bottom = "0";
+            fixed.textContent = ch;
+            slot.appendChild(fixed);
+          } else {
+            const stack = document.createElement("span");
+            stack.className = "stack";
+
+            const upper = ch === ch.toUpperCase();
+            // Pile: a,b,c,...,z (so ‘a’ sits just above the bottom window initially)
+            const letters = ALPHA.split("").map(cc => upper ? cc.toUpperCase() : cc);
+            stack.textContent = letters.join("\n"); // vertical stack
+
+            slot.appendChild(stack);
+          }
+
+          scr.appendChild(slot);
+          return slot;
+        });
+
+        // Timing: keep ≈2s total spin across all letters (letters only),
+        // but animate *smoothly* per character (distance-proportional).
+        const targetSteps = [...TEXT].map(ch => {
           if (!isLetter(ch)) return 0;
           const idx = ALPHA.indexOf(ch.toLowerCase());
-          return idx < 0 ? 0 : idx + 1; // include the target
+          return idx + 1; // ‘a’ needs 1em, …, ‘z’ needs 26em
         });
-        const totalSteps = stepsPerChar.reduce((a,b)=>a+b,0) || 1;
+        const totalStepUnits = targetSteps.reduce((a,b)=>a+b,0) || 1;
+        const TOTAL_MS = 2000;
 
-        // Make total animation ≈ 5000 ms
-        const TOTAL_MS = 5000;
-        const tick = Math.max(10, Math.floor(TOTAL_MS / totalSteps)); // step duration (ms)
-
-        // Animate each character sequentially
+        // Sequentially animate each slot
         let pos = 0;
-        const chars = scr.textContent.split("");
 
-        function animateNextChar() {
-          if (pos >= TEXT.length) {
-            // Done: reveal app, hide splash
-            document.getElementById("app").style.display = "";
-            document.getElementById("splash").style.display = "none";
+        function animateNext() {
+          if (pos >= slots.length) {
+            // 1s pause after the end, then reveal homepage
+            setTimeout(() => {
+              document.getElementById("app").style.display = "";
+              document.getElementById("splash").style.display = "none";
+            }, 1000);
             return;
           }
-          const target = TEXT[pos];
 
-          if (!isLetter(target)) {
-            // Non-letters: place immediately
-            chars[pos] = target;
-            scr.textContent = chars.join("");
+          const ch = TEXT[pos];
+          const slot = slots[pos];
+
+          if (!isLetter(ch)) {
             pos++;
-            animateNextChar();
+            animateNext();
             return;
           }
 
-          const targetIdx = ALPHA.indexOf(target.toLowerCase());
-          let k = 0;
-          const spin = setInterval(() => {
-            const currentChar = ALPHA[k];
-            // Preserve case
-            chars[pos] = (target === target.toUpperCase()) ? currentChar.toUpperCase() : currentChar;
-            scr.textContent = chars.join("");
-            if (k >= targetIdx) {
-              // lock final char
-              chars[pos] = target;
-              scr.textContent = chars.join("");
-              clearInterval(spin);
-              pos++;
-              animateNextChar();
-            } else {
-              k++;
-            }
-          }, tick);
+          const stack = slot.querySelector(".stack");
+          const idx = ALPHA.indexOf(ch.toLowerCase());      // 0-based
+          const distanceEm = (idx + 1);                     // a→1em, b→2em, … z→26em
+          const duration = Math.max(120, Math.round(TOTAL_MS * (distanceEm / totalStepUnits)));
+
+          // Animate the fall
+          stack.style.transition = `transform ${duration}ms cubic-bezier(.22,.61,.36,1)`;
+          // NOTE: positive translateY makes the pile fall down
+          requestAnimationFrame(() => {
+            stack.style.transform = `translateY(${distanceEm}em)`;
+          });
+
+          // When done, lock the final letter in the bottom window and remove the pile
+          const onDone = () => {
+            stack.removeEventListener("transitionend", onDone);
+            slot.innerHTML = ""; // clear
+            const final = document.createElement("span");
+            final.style.position = "absolute";
+            final.style.left = "0"; final.style.right = "0";
+            final.style.bottom = "0";
+            final.textContent = ch;
+            slot.appendChild(final);
+
+            pos++;
+            animateNext();
+          };
+          stack.addEventListener("transitionend", onDone, { once: true });
         }
 
-        // Start from a blank screen for a beat, then animate
-        // (optional tiny delay so "blank" is perceptible)
-        setTimeout(animateNextChar, 50);
+        // tiny initial blank beat so the piles are visible
+        setTimeout(animateNext, 50);
       });
     </script>
 
