@@ -64,6 +64,24 @@
         user-select: none;
         white-space: pre;                  /* preserve spaces and punctuation */
       }
+      #scramble {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; /* monospace for tidy columns */
+        display: inline-flex;          /* lay slots left-to-right */
+        gap: 0;                        /* no spacing between slots */
+      }
+      .slot {
+        display: inline-block;
+        width: 1ch;                    /* one character width */
+        height: 1em;                   /* show only one row */
+        line-height: 1em;
+        overflow: hidden;              /* hide the rest of the stack */
+        vertical-align: bottom;
+        text-align: left;
+      }
+      .stack {
+        display: block;
+        white-space: pre;              /* keep line breaks in innerHTML */
+        }
     </style>
 </head>
 <body>
@@ -200,60 +218,83 @@
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const TEXT = "GSN (Gays Sin Nombre)";
+        const TEXT = "hqt (hola que tal)";
         const ALPHA = "abcdefghijklmnopqrstuvwxyz";
         const isLetter = c => /[a-zA-Z]/.test(c);
 
-        // Build slots so each character stays in its final position
         const scr = document.getElementById("scramble");
-        scr.textContent = "".padEnd(TEXT.length, " ");
+        scr.innerHTML = ""; // we'll build slots instead of plain text
 
-        // Precompute total steps (letters spin from 'a' to target letter)
+        // Build one "slot" per character to keep positions fixed
+        const slots = [...TEXT].map(ch => {
+          const slot = document.createElement("span");
+          slot.className = "slot";
+
+          if (!isLetter(ch)) {
+            // Non-letters are static
+            slot.textContent = ch;
+          } else {
+            // Letters start empty; we'll stack letters as they "fall"
+            const stack = document.createElement("span");
+            stack.className = "stack";
+            stack.innerHTML = ""; // will fill during spin
+            slot.appendChild(stack);
+          }
+          scr.appendChild(slot);
+          return slot;
+        });
+
+        // Compute how many steps total so the spin ≈ 2000ms
         const stepsPerChar = [...TEXT].map(ch => {
           if (!isLetter(ch)) return 0;
           const idx = ALPHA.indexOf(ch.toLowerCase());
-          return idx < 0 ? 0 : idx + 1; // include the target
+          return idx < 0 ? 0 : idx + 1; // include target
         });
         const totalSteps = stepsPerChar.reduce((a,b)=>a+b,0) || 1;
+        const SPIN_MS = 2000;                 // ~2s animation
+        const tick = Math.max(10, Math.floor(SPIN_MS / totalSteps));
 
-        // Make total animation ≈ 5000 ms
-        const TOTAL_MS = 5000;
-        const tick = Math.max(10, Math.floor(TOTAL_MS / totalSteps)); // step duration (ms)
-
-        // Animate each character sequentially
         let pos = 0;
-        const chars = scr.textContent.split("");
 
         function animateNextChar() {
           if (pos >= TEXT.length) {
-            // Done: reveal app, hide splash
-            document.getElementById("app").style.display = "";
-            document.getElementById("splash").style.display = "none";
+            // (ii) Add 1s pause before showing the homepage
+            setTimeout(() => {
+              document.getElementById("app").style.display = "";
+              document.getElementById("splash").style.display = "none";
+            }, 1000);
             return;
           }
+
           const target = TEXT[pos];
+          const slot = slots[pos];
 
           if (!isLetter(target)) {
-            // Non-letters: place immediately
-            chars[pos] = target;
-            scr.textContent = chars.join("");
+            // Place punctuation/space immediately and move on
             pos++;
             animateNextChar();
             return;
           }
 
+          // (i) "Pile up" letters in a column as they fall to the target
           const targetIdx = ALPHA.indexOf(target.toLowerCase());
           let k = 0;
+
+          const stackEl = slot.querySelector(".stack");
+          const isUpper = target === target.toUpperCase();
+
           const spin = setInterval(() => {
-            const currentChar = ALPHA[k];
-            // Preserve case
-            chars[pos] = (target === target.toUpperCase()) ? currentChar.toUpperCase() : currentChar;
-            scr.textContent = chars.join("");
+            // Build the visible stack from 'a' to the current letter
+            const letters = ALPHA.slice(0, k + 1).split("").map(ch =>
+              isUpper ? ch.toUpperCase() : ch
+            );
+            // join with newlines so overflow hides above rows, showing the "fall"
+            stackEl.innerHTML = letters.join("\n");
+
             if (k >= targetIdx) {
-              // lock final char
-              chars[pos] = target;
-              scr.textContent = chars.join("");
               clearInterval(spin);
+              // Lock final letter cleanly
+              slot.textContent = target;
               pos++;
               animateNextChar();
             } else {
@@ -262,8 +303,7 @@
           }, tick);
         }
 
-        // Start from a blank screen for a beat, then animate
-        // (optional tiny delay so "blank" is perceptible)
+        // Tiny initial blank beat, then start animation
         setTimeout(animateNextChar, 50);
       });
     </script>
