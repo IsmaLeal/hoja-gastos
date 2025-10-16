@@ -49,8 +49,33 @@
             sidebar.style.width = sidebar.style.width === "250px" ? "0" : "250px";
         }
     </script>
+    <style>
+      #splash {
+        position: fixed; inset: 0;
+        background: #ffffff;               /* blank screen */
+        display: grid; place-items: center;
+        font-family: system-ui, sans-serif;
+      }
+      #scramble {
+        font-size: clamp(24px, 5vw, 56px);
+        letter-spacing: .03em;
+        font-weight: 600;
+        color: #111;
+        user-select: none;
+        white-space: pre;                  /* preserve spaces and punctuation */
+      }
+    </style>
 </head>
 <body>
+    <div id="splash">
+      <div id="scramble" aria-label="intro"></div>
+    </div>
+
+    <div id="app" style="display:none;">
+      <!-- ⬇️ EVERYTHING you already had in index.html goes inside here ⬇️ -->
+      {{ message or error }}
+      <!-- your existing form/table/etc that uses `people=get_people_dict()` -->
+    </div>
     {% if message %}
         <p style="color:#4cde4c;">{{ message }}</p>
     {% endif %}
@@ -173,5 +198,75 @@
             <button type="submit">Que me paguen!</button>
         </form>
     </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const TEXT = "hqt (hola que tal)";
+        const ALPHA = "abcdefghijklmnopqrstuvwxyz";
+        const isLetter = c => /[a-zA-Z]/.test(c);
+
+        // Build slots so each character stays in its final position
+        const scr = document.getElementById("scramble");
+        scr.textContent = "".padEnd(TEXT.length, " ");
+
+        // Precompute total steps (letters spin from 'a' to target letter)
+        const stepsPerChar = [...TEXT].map(ch => {
+          if (!isLetter(ch)) return 0;
+          const idx = ALPHA.indexOf(ch.toLowerCase());
+          return idx < 0 ? 0 : idx + 1; // include the target
+        });
+        const totalSteps = stepsPerChar.reduce((a,b)=>a+b,0) || 1;
+
+        // Make total animation ≈ 2000 ms
+        const TOTAL_MS = 2000;
+        const tick = Math.max(10, Math.floor(TOTAL_MS / totalSteps)); // step duration (ms)
+
+        // Animate each character sequentially
+        let pos = 0;
+        const chars = scr.textContent.split("");
+
+        function animateNextChar() {
+          if (pos >= TEXT.length) {
+            // Done: reveal app, hide splash
+            document.getElementById("app").style.display = "";
+            document.getElementById("splash").style.display = "none";
+            return;
+          }
+          const target = TEXT[pos];
+
+          if (!isLetter(target)) {
+            // Non-letters: place immediately
+            chars[pos] = target;
+            scr.textContent = chars.join("");
+            pos++;
+            animateNextChar();
+            return;
+          }
+
+          const targetIdx = ALPHA.indexOf(target.toLowerCase());
+          let k = 0;
+          const spin = setInterval(() => {
+            const currentChar = ALPHA[k];
+            // Preserve case
+            chars[pos] = (target === target.toUpperCase()) ? currentChar.toUpperCase() : currentChar;
+            scr.textContent = chars.join("");
+            if (k >= targetIdx) {
+              // lock final char
+              chars[pos] = target;
+              scr.textContent = chars.join("");
+              clearInterval(spin);
+              pos++;
+              animateNextChar();
+            } else {
+              k++;
+            }
+          }, tick);
+        }
+
+        // Start from a blank screen for a beat, then animate
+        // (optional tiny delay so "blank" is perceptible)
+        setTimeout(animateNextChar, 50);
+      });
+    </script>
+
 </body>
 </html>
