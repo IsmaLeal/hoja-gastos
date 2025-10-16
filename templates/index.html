@@ -200,7 +200,7 @@
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const TEXT = "hqt (hola que tal)";
+        const TEXT = "GSN (Gays Sin Nombre)";
         const ALPHA = "abcdefghijklmnopqrstuvwxyz";
         const isLetter = c => /[a-zA-Z]/.test(c);
 
@@ -216,8 +216,8 @@
         });
         const totalSteps = stepsPerChar.reduce((a,b)=>a+b,0) || 1;
 
-        // Make total animation ≈ 2000 ms
-        const TOTAL_MS = 2000;
+        // Make total animation ≈ 5000 ms
+        const TOTAL_MS = 5000;
         const tick = Math.max(10, Math.floor(TOTAL_MS / totalSteps)); // step duration (ms)
 
         // Animate each character sequentially
